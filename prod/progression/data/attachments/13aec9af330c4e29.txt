@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/register
-
-Request body:
-{"first_name": "David", "last_name": "Johnson", "email": "qa.d7c1935e84034f8f9ab47df9423269c6@example.com", "password": "@2R5i@iQv3jr&T", "dob": "1990-01-15", "phone": "7777777777777777777777777", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
-
-Response 422:
-{"phone":["The phone field must not be greater than 24 characters."]}

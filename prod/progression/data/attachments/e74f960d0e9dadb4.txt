@@ -1,7 +1,0 @@
-GET https://api.practicesoftwaretesting.com/favorites/01m72pg82xec3mndz5f6nvej73
-
-Request body:
-
-
-Response 200:
-{"id":"01m72pg82xec3mndz5f6nvej73","user_id":"01m72pg67c5areyj751www3sgp","product_id":"01M72N9MPBNWQ5C39R4CSSNW2G"}

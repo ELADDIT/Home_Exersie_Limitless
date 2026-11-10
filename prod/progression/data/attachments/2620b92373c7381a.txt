@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/register
-
-Request body:
-{"first_name": "Kenneth", "last_name": "Brown", "email": "qa.410e3ef67a9d4aaa821ec7556ab17331@example.com", "password": "Abcdefg1xx", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
-
-Response 422:
-{"password":["The password field must contain at least one symbol."]}

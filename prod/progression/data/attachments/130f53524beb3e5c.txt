@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/carts/01m72qngxm4qeva339zy4smy4t
+
+Request body:
+{"product_id": "does-not-exist", "quantity": 1}
+
+Response 422:
+{"message":"The selected product id is invalid.","errors":{"product_id":["The selected product id is invalid."]}}

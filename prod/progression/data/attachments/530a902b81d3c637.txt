@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/users/01m72qmrfw3xea083djfhcjvh1
+
+Request body:
+
+
+Response 200:
+{"id":"01m72qmrfw3xea083djfhcjvh1","provider":null,"first_name":"Abigail","last_name":"Reed","phone":"0612345678","dob":"1990-01-15","email":"qa.11ab99fe74bc402687e57490c4c203f0@example.com","totp_enabled":false,"created_at":"2026-11-10 12:41:34","address":{"street":"Lesingel 8","house_number":"8","city":"Steensel","state":"Noord-Holland","country":"NL","postal_code":"1012AB"},"enabled":true,"role":"user","failed_login_attempts":0}

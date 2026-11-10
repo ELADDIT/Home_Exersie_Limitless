@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/reports/total-sales-per-country
+
+Request body:
+
+
+Response 403:
+{"message":"Forbidden"}

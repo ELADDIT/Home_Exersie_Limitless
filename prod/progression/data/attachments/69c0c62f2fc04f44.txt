@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/invoices
+
+Request body:
+{"billing_street": "Lesingel 8", "billing_city": "Nowhereville", "billing_state": "Noord-Holland", "billing_country": "NL", "billing_postal_code": "1012AB", "payment_method": "cash-on-delivery", "payment_details": {}, "cart_id": "01m72qnvrfczwjf47ej392gvng"}
+
+Response 422:
+{"billing_country":["The billing_country does not match the entered address. The city does not belong to the selected country."]}
