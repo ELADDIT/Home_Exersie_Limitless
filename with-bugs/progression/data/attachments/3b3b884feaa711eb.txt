@@ -1,0 +1,7 @@
+PATCH https://api-with-bugs.practicesoftwaretesting.com/products/00000000000000000000000000
+
+Request body:
+{}
+
+Response 405:
+{"message":"Method is not allowed for the requested route"}

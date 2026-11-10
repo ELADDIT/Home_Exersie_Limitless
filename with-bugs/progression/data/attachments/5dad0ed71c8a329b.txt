@@ -1,0 +1,7 @@
+POST https://api-with-bugs.practicesoftwaretesting.com/payment/check
+
+Request body:
+{"payment_method": "gift-card", "payment_details": {"gift_card_number": "1", "validation_code": "1"}}
+
+Response 200:
+{"message":"Payment was successful"}

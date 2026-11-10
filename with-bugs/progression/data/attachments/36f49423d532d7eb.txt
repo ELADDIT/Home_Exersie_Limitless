@@ -1,0 +1,7 @@
+POST https://api-with-bugs.practicesoftwaretesting.com/products
+
+Request body:
+{}
+
+Response 422:
+{"name":["The name field is required."],"price":["The price field is required."],"category_id":["The category id field is required."],"brand_id":["The brand id field is required."],"is_location_offer":["The is location offer field is required."],"is_rental":["The is rental field is required."],"product_image_id":["The product image id field is required."]}

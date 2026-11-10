@@ -1,0 +1,7 @@
+PUT https://api-with-bugs.practicesoftwaretesting.com/brands/00000000000000000000000000
+
+Request body:
+{}
+
+Response 200:
+{"success":false}

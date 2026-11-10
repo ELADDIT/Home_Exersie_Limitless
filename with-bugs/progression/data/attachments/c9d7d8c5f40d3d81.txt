@@ -1,0 +1,7 @@
+POST https://api-with-bugs.practicesoftwaretesting.com/payment/check
+
+Request body:
+{"payment_method": "", "payment_details": {}}
+
+Response 200:
+{"message":"Payment was successful"}
