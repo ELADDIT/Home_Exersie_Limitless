@@ -42,7 +42,7 @@ def test_order_appears_in_own_invoice_list_with_matching_lines(customer_api, car
         "invoice lines must match what was in the cart"
 
 
-@pytest.mark.progression
+@pytest.mark.sanity  # access control is risk #1: one privacy check runs on every push
 def test_customer_cannot_read_another_customers_invoice(api, customer_api, other_customer, cart_with_items):
     invoice = place(customer_api, cart_with_items[0])
     other_token = api.login(other_customer.email, other_customer.password)

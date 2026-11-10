@@ -86,3 +86,27 @@ def test_product_detail_matches_listing(api, sample):
 @pytest.mark.progression
 def test_unknown_product_id_is_404(api):
     assert api.get("/products/does-not-exist").status_code == 404, "unknown product must be 'not found'"
+
+
+def first_page_names(api) -> list[str]:
+    return [p["name"] for p in api.get("/products", params={"page": 1}).json()["data"]]
+
+
+@pytest.mark.progression
+def test_every_product_can_be_found_by_its_full_name(api):
+    names = [n for n in first_page_names(api) if " with " not in n.lower()]  # see the known bug below
+    missing = [n for n in names
+               if n not in {p["name"] for p in api.get("/products/search", params={"q": n}).json()["data"]}]
+    assert not missing, f"customers can't find these products by their exact name: {missing}"
+
+
+@pytest.mark.progression
+@pytest.mark.xfail(strict=True, reason="BUG: search returns nothing for product names containing 'with', "
+                                       "e.g. 'Claw Hammer with Shock Reduction Grip' (found 2026-11-10)")
+def test_products_with_with_in_the_name_can_be_found(api):
+    names = [n for n in first_page_names(api) if " with " in n.lower()]
+    if not names:
+        pytest.skip("no product name containing 'with' on the first catalog page")
+    missing = [n for n in names
+               if n not in {p["name"] for p in api.get("/products/search", params={"q": n}).json()["data"]}]
+    assert not missing, f"customers can't find these products by their exact name: {missing}"
