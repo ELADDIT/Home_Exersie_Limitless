@@ -1,1 +1,1 @@
-{"reportName":"Toolshop sanity (prod)","testRuns":[],"statistic":{"failed":0,"broken":0,"skipped":3,"passed":4,"unknown":0,"total":7},"time":{"start":1794314477032,"stop":1794314482687,"duration":5655,"minDuration":0,"maxDuration":1221,"sumDuration":3717}}
+{"reportName":"Toolshop sanity (prod)","testRuns":[],"statistic":{"failed":0,"broken":0,"skipped":3,"passed":5,"unknown":0,"total":8},"time":{"start":1794317178608,"stop":1794317195144,"duration":16536,"minDuration":0,"maxDuration":2364,"sumDuration":6866}}
