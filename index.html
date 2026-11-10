@@ -11,7 +11,7 @@
     --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
     --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
     --accent: #2a78d6;
-    --good: #0ca30c; --good-text: #006300; --critical: #d03b3b; --serious: #ec835a; --known: #b5b3ab;
+    --good: #0ca30c; --good-text: #006300; --critical: #d03b3b; --serious: #ec835a; --known: #2a78d6;
   }
   @media (prefers-color-scheme: dark) {
     :root:where(:not([data-theme="light"])) {
@@ -19,7 +19,7 @@
       --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232322;
       --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
       --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
-      --accent: #3987e5; --good-text: #0ca30c; --known: #5f5e59;
+      --accent: #3987e5; --good-text: #0ca30c; --known: #3987e5;
     }
   }
   :root[data-theme="dark"] {
@@ -27,7 +27,7 @@
     --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232322;
     --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
     --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
-    --accent: #3987e5; --good-text: #0ca30c; --known: #5f5e59;
+    --accent: #3987e5; --good-text: #0ca30c; --known: #3987e5;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--page); color: var(--ink);
@@ -115,8 +115,9 @@
   <h2>Run history</h2>
   <div class="table-wrap"><table id="history"></table></div>
 
-  <footer>Passed, failed and broken come from the Allure report of each run. <b>Known bugs</b> are tests
-    marked "expected to fail" for confirmed app bugs. <b>Broken</b> means the test could not finish, for example
+  <footer>Passed, failed and broken come from the Allure report of each run. <b>Known issues</b> (blue) are
+    tests marked "expected to fail" for confirmed app bugs, plus UI tests skipped because the site's bot protection
+    (Cloudflare) blocks the browser on GitHub's runners (see the README; they pass locally). <b>Broken</b> means the test could not finish, for example
     when the shared site was slow or unreachable, rather than a failed check.
     The <code>with-bugs</code> environment is a copy of the shop with deliberate bugs, so failures there are expected.</footer>
 </main>
@@ -131,7 +132,7 @@ const SERIES = [   // stacking order bottom -> top; status colors carry state, a
   { key: "passed",  label: "Passed",     color: "var(--good)" },
   { key: "failed",  label: "Failed",     color: "var(--critical)" },
   { key: "broken",  label: "Broken",     color: "var(--serious)" },
-  { key: "skipped", label: "Known bugs", color: "var(--known)" },
+  { key: "skipped", label: "Known issues", color: "var(--known)" },
 ];
 const FILTERS = {
   env: [["all", "All"], ["prod", "prod"], ["with-bugs", "with-bugs"]],
@@ -236,7 +237,7 @@ function renderCards(reps) {
     }
     card.append(
       el("div", { class: "meta", text: [ago(run.date), run.trigger, run.commit && `commit ${run.commit}`, `run #${run.run}`].filter(Boolean).join(" · ") }),
-      el("div", { class: "nums" }, ...[["passed", "Passed"], ["failed", "Failed"], ["broken", "Broken"], ["skipped", "Known bugs"]]
+      el("div", { class: "nums" }, ...[["passed", "Passed"], ["failed", "Failed"], ["broken", "Broken"], ["skipped", "Known issues"]]
         .map(([k, l]) => el("div", { class: "num" }, el("b", { text: String(s[k] ?? 0) }), el("span", { text: l })))),
       el("div", { class: "links" }, el("a", { href: d.reportUrl, text: "Full report →" }),
         run.ci_url ? el("a", { href: run.ci_url, text: "CI run →" }) : null));
@@ -325,7 +326,7 @@ function renderHistory(reps) {
   const rows = reps.flatMap(r => data[`${r.env}/${r.set}`].runs.filter(inPeriod).map(run => ({ ...run, r })))
     .sort((a, b) => (b.date || "").localeCompare(a.date || "") || b.run - a.run);
   const table = document.getElementById("history");
-  const head = ["When", "Set", "Env", "Trigger", "Commit", "Passed", "Failed", "Broken", "Known bugs", "Duration", ""];
+  const head = ["When", "Set", "Env", "Trigger", "Commit", "Passed", "Failed", "Broken", "Known issues", "Duration", ""];
   table.replaceChildren(el("thead", {}, el("tr", {}, ...head.map(h => el("th", { text: h })))),
     el("tbody", {}, ...(rows.length ? rows.map(run => el("tr", {},
       el("td", { text: fmtDate(run.date) }), el("td", { text: run.r.set }), el("td", { text: run.r.env }),

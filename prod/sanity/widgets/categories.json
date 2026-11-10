@@ -1,1 +1,1 @@
-{"total":1,"items":[{"uid":"7cdbc776a2c71dafd6635f96e7a6c9b0","name":"Product failures","statistic":{"failed":3,"broken":0,"skipped":0,"passed":0,"unknown":0,"total":3}}]}
+{"total":1,"items":[{"uid":"0a24d6c5e3f7bd12b138bfd1fa6d1506","name":"Known issue: blocked by the site's bot protection (Cloudflare) - environment, not a product bug","statistic":{"failed":0,"broken":0,"skipped":3,"passed":0,"unknown":0,"total":3}}]}
