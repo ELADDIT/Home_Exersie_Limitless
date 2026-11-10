@@ -41,7 +41,7 @@ jobs:
           TOOLSHOP_ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
           TOOLSHOP_ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         run: >
-          pytest -m ${{ inputs.suite }} -n 4
+          pytest -m ${{ inputs.suite }} -n 4 --browser-channel chromium
           --alluredir allure-results
           --junitxml junit.xml
           --tracing retain-on-failure --output test-results
