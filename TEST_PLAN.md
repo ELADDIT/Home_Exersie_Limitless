@@ -79,13 +79,21 @@ Guiding rule: **check business logic through the API** (fast, stable, no limit o
 2. **Access control grew from "can I read it?" to "can I change it?" and "can I fake who I am?".** The first matrix only checked reads by role. Adding write-side checks (changing another customer's order, catalog writes as a guest) and token checks (edited, unsigned, logged-out and replaced tokens) found the most serious bugs in the shop: any customer can read all users' personal data and change anyone's order status.
 3. **Test data had to respect the shared site's limits.** Three things only showed up while building:
    - the API **locks an email after repeated failed logins**, so fixed "wrong" emails got locked and caused false failures;
-   - **orders consume real stock**: our order tests drained the first two products;
+   - the shared site's **stock changed under us**: two products went out of stock. At first I blamed our orders, which was wrong: testing later showed that **orders don't reduce stock at all** (an app bug, now an expected-to-fail test). The likelier cause for one of them was my own exploratory request: an unauthenticated empty update to a product returned "success". That finding became the catalog-write tests, which only ever target ids that don't exist;
    - the site's **database gets reset**, which changes product ids.
 
-   **Response:** every identifier is unique per run, orders pick a random in-stock product and a quantity of 1–3 capped by the real stock count, and no test relies on a hard-coded id.
+   **Response:** every identifier is unique per run, orders pick a random in-stock product and a quantity of 1–3 capped by the real stock count, write probes never touch real products, and no test relies on a hard-coded id.
 4. **The 10th UI test** was kept in reserve, then used for a **tour of the smaller features** (price slider, brand filter, compare, language, rentals, contact form, favorites). A broken small feature is still a broken feature. Soft checks (`pytest-check`) record every failing feature instead of stopping at the first one. The tour stays within the 10-test budget.
 5. **The invoice PDF came back into scope, and then went to "known issues".** It was out of scope in the original plan. During review we decided a customer's order confirmation PDF matters and should be checked in a UI test. Measuring it showed the PDF takes several minutes to be ready, more than the whole 5-minute pipeline, so it is documented as a known issue instead (see the README).
 6. **CI runs in the official Playwright container.** The first run spent ~2 of the 5 allowed minutes installing the browser. Playwright was pinned to the container's version (1.64.1).
 7. **A race condition in the shop's UI shaped how the tests wait.** Typing into the search while the first product list is still loading gets overwritten when that load finishes. The tests now wait for the catalog to be on screen first, as a person would. Likewise, each price-slider step waits for its own reload.
 8. **Kept out on purpose:** a script-injection test on the admin dashboard (token theft). The probe would be visible to everyone on the shared demo, so it belongs in a private environment.
 9. **The dashboard became a real landing page.** The first version was a plain page of links to four Allure reports. It now opens on the latest status of every set and environment, a results-per-run chart, the failures in the latest runs and the run history, with filters for environment, test set and period. The nightly run now covers both environments, so the `with-bugs` reports stay current. "Shared site slow or unreachable" is reported as its own category, after a burst of the shared API's timeouts during development made a run red for reasons that weren't the store's logic.
+10. **Checkout rules and account security got their own tests** after a review of what the suite did *not* cover. Six new confirmed bugs:
+    - an empty cart can be ordered;
+    - one cart can be ordered twice;
+    - out-of-stock products can be ordered;
+    - orders don't reduce stock;
+    - billing state is optional although the spec requires it;
+    - billing postal code is optional although the spec requires it.
+11. **The browser tests are blocked on GitHub's runners** by the site's Cloudflare bot check. They pass from a normal connection. Trying full Chromium on CI didn't help. Instead of disguising the browser, which would mean defeating the site's own security control, the suite reports this case as "blocked by the site's bot protection", separate from product failures. The browser tests are verified locally, with screenshots.

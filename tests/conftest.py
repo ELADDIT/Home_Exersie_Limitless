@@ -31,11 +31,12 @@ FEATURE_BY_MODULE = {
     "test_access_control": "Access control", "test_access_writes": "Access control",
     "test_registration": "Registration", "test_boundaries": "Input validation (boundaries)",
     "test_minor_features": "Minor features (UI/UX)",
+    "test_account_security": "Account security", "test_checkout_rules": "Orders & invoices",
 }
 # The UI journeys file covers several areas, so map by a keyword in the test name (first match wins).
 FEATURE_BY_UI_KEYWORD = [("access", "Access control"), ("checkout", "Checkout"), ("login", "Login"),
                          ("registration", "Registration"), ("catalog", "Catalog"), ("cart", "Cart")]
-CRITICAL_FEATURES = {"Access control", "Login tokens", "Checkout", "Orders & invoices", "Payment"}
+CRITICAL_FEATURES = {"Account security", "Access control", "Login tokens", "Checkout", "Orders & invoices", "Payment"}
 
 
 def feature_of(item) -> str:
@@ -139,7 +140,7 @@ PURCHASE_LIMITED = {"Thor Hammer"}  # app rule: max one per customer, so the gen
 
 @pytest.fixture
 def pick_purchases(api, admin_api):
-    """For tests that PLACE ORDERS. Orders reduce stock on the shared site, so we spread purchases:
+    """For tests that PLACE ORDERS. Orders should reduce stock (the app currently doesn't: known bug), so we spread purchases:
     random products from the first catalog page, each with a random quantity 1..3 that never exceeds
     the real stock (read via the admin API). Returns a function: pick(count) -> [(product, quantity)]."""
     def pick(count: int = 1) -> list[tuple[dict, int]]:

@@ -103,7 +103,9 @@ jobs:
           EOF
           # Categories: tell "the shared site was slow/unreachable" apart from real product failures.
           cat > results/allure-results/categories.json <<'EOF'
-          [{"name": "Shared site slow or unreachable (not a product bug)", "matchedStatuses": ["broken"],
+          [{"name": "Blocked by the site's bot protection (Cloudflare) - environment, not a product bug",
+            "matchedStatuses": ["broken", "failed"], "messageRegex": ".*(BLOCKED BY BOT PROTECTION|Performing security verification).*"},
+           {"name": "Shared site slow or unreachable (not a product bug)", "matchedStatuses": ["broken"],
             "messageRegex": ".*(ReadTimeout|ConnectTimeout|ConnectionError|handshake operation timed out|net::ERR_).*"},
            {"name": "Known app bug (expected to fail)", "matchedStatuses": ["skipped"], "messageRegex": ".*BUG:.*"},
            {"name": "Product failures", "matchedStatuses": ["failed"]},

@@ -125,7 +125,8 @@ Run your new test **3 times** (`for i in 1 2 3; do pytest <your test> -n 4; done
 ## 9. Things about this shop that will bite you
 
 - **Account lock:** after several failed logins, the API locks that email (HTTP 423). Only send wrong passwords for your own fresh `customer`, never a fixed email.
-- **Orders use up real stock** on the shared site. Tests that place orders must use `pick_purchases(n)`: random in-stock products, quantity 1 to 3, capped by the real stock count.
+- **Tests that place orders** must use `pick_purchases(n)`: random in-stock products, quantity 1 to 3, capped by the real stock count. This keeps orders spread out and realistic. Today the app doesn't reduce stock on orders (a known bug), but once that's fixed, tests must not drain the shared site.
+- **Never send write requests to real catalog items** (products, brands, categories), even ones you expect to be refused. Use ids that don't exist. An unauthenticated empty update to a real product once returned "success".
 - **Thor Hammer** has a limit of one per customer.
 - **Billing address:** the city must match the country. Use `toolshop.data.BILLING_ADDRESS`.
 - **The shared site's database gets reset now and then** (invoice numbers restart). Never rely on data created in an earlier run.

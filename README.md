@@ -60,7 +60,7 @@ To get an HTML report locally, add `--alluredir allure-results` and run `allure 
 2. **Every test creates its own customer.** The site is public and shared, and its demo accounts are used by strangers. A fresh customer per test (registered through the API, unique email) makes tests safe to run in parallel, several runs at a time. The demo admin is used for read-only checks only.
 3. **In browser tests, the step under test is done only through the screen** (clicks and typing). The API is used only for preconditions, such as creating the customer, or as the source of the expected answer.
 4. **Red must mean broken.** There are no sleeps; Playwright waits on what's visible. Selectors use the site's `data-test` attributes. Retries happen only on network errors to the shared site, never on a failed assertion. Known app bugs are strict `xfail`s, so a green run is honest and turns red once the bug is fixed.
-5. **Orders are spread across the catalog.** Placing orders uses up real stock on the shared site. Order tests pick a random in-stock product and a random quantity of 1–3, never more than the real stock count (read via the admin API).
+5. **Orders are spread across the catalog.** Order tests pick a random in-stock product and a random quantity of 1–3, never more than the real stock count (read via the admin API). Multi-unit orders get exercised, no single product is hammered, and once the app's stock bug (below) is fixed, the tests won't drain the shared site's stock.
 6. **Boundary values are tested** for every validated field: on the limit, just inside, just outside. Dates are computed from today so the tests never go stale.
 7. **Easy to extend.** Shared code lives in `toolshop/` (config, API client, response models, page objects). Collection fails if a test has no `sanity`/`progression` marker, or if the suite exceeds 10 UI tests. See the [new-tester guide](docs/HOW_TO_ADD_A_TEST.md).
 8. **Readable reports without per-test boilerplate.** One hook in `tests/conftest.py` gives every test a readable title, a description (its docstring, else its file's docstring), a product area (Checkout, Access control, …), a severity (sanity = blocker; security and money areas = critical), and tags (set, layer, `known-bug`). New tests get all of it automatically.
@@ -80,6 +80,9 @@ All were confirmed by hand on 2026-11-10 and are covered by expected-to-fail tes
 | Medium | Unknown payment methods (e.g. `"bitcoin"`, empty) are accepted as successful payments. |
 | Medium | Registration accepts invalid emails such as `plainaddress`. |
 | Medium | A customer whose 18th birthday is today can't register (off-by-one at the age limit). |
+| High | **Ordering does not reduce stock**, and an **out-of-stock product can be added to the cart and ordered**, so the shop oversells. |
+| High | An order can be placed with an **empty cart** (an invoice with total 0), and the **same cart can be ordered twice** (two invoices). |
+| Medium | Billing state and postal code are optional when placing an order, although the API spec marks them as required. |
 | Medium | The 99-per-line cart limit is only checked per request: adding 1 and then 99 gives a line of 100. |
 | Known issue (no test) | **Invoice PDF is very slow:** after an order, "Download PDF" stays disabled for several minutes (more than 3 minutes in our timing). A test would have to wait longer than the whole 5-minute pipeline allows. We'd solve this differently: a separate scheduled check with a long timeout, or ask the team to expose the PDF job status so the test can wait on it efficiently. |
 | Observation | The login token is stored in the browser's `localStorage`, so any script injected into the page could read it. |
@@ -94,7 +97,7 @@ All were confirmed by hand on 2026-11-10 and are covered by expected-to-fail tes
 - **Cross-browser and mobile layouts.** Only Chromium runs, to stay within the 5-minute budget.
 - **Weaknesses I know about:**
   - **Shared-site dependency.** Strangers can lock the demo admin account with wrong passwords (the API locks an email after repeated failures), which would turn the admin-based tests red. The site's database is also reset now and then: product ids change, and stock and invoices start over. Our tests never rely on earlier data, but a reset in the middle of a run could fail a test.
-  - **Tests consume shared stock.** This is mitigated, not solved: orders are spread out, and products run out between resets anyway.
+  - **Our tests create data on a shared site** (customers, carts, orders, contact messages). It's unavoidable when testing a live shop, and the site's resets clean it up.
   - The UI tests rely on a few product names (e.g. "Sledgehammer", "Thor Hammer") from the seed data.
   - The expected-to-fail tests for invalid emails create junk accounts on the shared site for as long as that bug exists.
 - **Next steps:** run the suite against `with-bugs` on a schedule and compare it with prod; add contract tests generated from the OpenAPI spec; add a private environment (Docker image of Toolshop) for destructive and security tests.
