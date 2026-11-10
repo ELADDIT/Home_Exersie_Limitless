@@ -1,14 +1,16 @@
-"""Browser tests. Every step under test goes through the screen; the only API use is the
-`customer` fixture, which creates a fresh account as a precondition."""
+"""Browser tests. Every step under test goes through the screen. The API is used only for preconditions
+(a fresh customer, picking products from the live catalog, an existing order for the admin to find)."""
 import re
 
 import allure
 import pytest
 from playwright.sync_api import Page, expect
+from pytest_check import check
 
 from toolshop.data import strong_password, unique_email
-from toolshop.pages import (AccountPage, AdminDashboardPage, CheckoutPage, HeaderComponent, HomePage,
-                            LoginPage, ProductPage, RegisterPage)
+from toolshop.pages import (ADMIN_PAGES, AccountPage, AdminDashboardPage, AdminOrdersPage, AdminUsersPage,
+                            CheckoutPage, HeaderComponent, HomePage, InvoicesPage, LoginPage, ProductPage, RegisterPage,
+                            open_admin_menu)
 
 
 def money(text: str) -> float:
@@ -30,18 +32,36 @@ def add_product_from_home(page: Page, name: str, quantity: int = 1, expected_bad
     HomePage(page).expect_loaded(cart_filled=True)
 
 
+def check_invoice_in_my_invoices(page: Page, cart_total: str) -> None:
+    """On the confirmation screen read the invoice number, then find exactly that invoice (and total) in My invoices."""
+    confirmation = page.get_by_text(re.compile(r"Your invoice number is INV-\S+"))
+    expect(confirmation).to_be_visible()
+    invoice_number = re.search(r"INV-\S+", confirmation.inner_text()).group(0).rstrip(".")
+    invoices = InvoicesPage(page)
+    invoices.open_from_menu()
+    expect(page).to_have_url(re.compile(r"/account/invoices$"))
+    invoices.expect_loaded()
+    expect(invoices.rows).to_have_count(1)  # a brand-new customer has exactly one invoice
+    expect(invoices.row_with(invoice_number)).to_have_count(1)
+    expect(invoices.row_with(invoice_number)).to_contain_text(cart_total)
+    allure.attach(page.screenshot(), name="My invoices", attachment_type=allure.attachment_type.PNG)
+
+
 # ---------------------------------------------------------------- SANITY
 @pytest.mark.sanity
-def test_guest_searches_and_adds_product_to_cart(page: Page):
+def test_guest_searches_and_adds_product_to_cart(page: Page, catalog_products):
     home, product, header, cart = HomePage(page), ProductPage(page), HeaderComponent(page), CheckoutPage(page)
-    with allure.step("Search for a product by name"):
+    [item] = catalog_products(1)  # a random in-stock product from the live catalog
+    name = item["name"]
+    with allure.step(f"Search for '{name}' by name"):
         home.open()
         home.expect_loaded()
-        home.search("Sledgehammer")
-        expect(home.product_names).to_have_text(["Sledgehammer"])
+        home.search(name)
+        expect(home.product_card_name(name)).to_have_count(1)
+        expect(home.product_names.filter(has_not_text=re.compile(re.escape(name), re.I))).to_have_count(0)
     with allure.step("Open the product page and add 2 pieces to the cart"):
-        home.open_product("Sledgehammer")
-        expect(product.name).to_have_text("Sledgehammer")
+        home.open_product(name)
+        expect(product.name).to_have_text(name)
         product.expect_loaded()
         unit_price = money(product.unit_price.inner_text())
         product.increase_quantity()
@@ -53,9 +73,9 @@ def test_guest_searches_and_adds_product_to_cart(page: Page):
         header.open_cart()
         cart.expect_cart_loaded()
         expect(cart.lines).to_have_count(1)
-        expect(cart.line("Sledgehammer")).to_be_visible()
-        expect(cart.line("Sledgehammer").get_by_test_id("product-quantity")).to_have_value("2")
-        expect(cart.line_price("Sledgehammer")).to_have_text(f"${unit_price * 2:.2f}")
+        expect(cart.line(name)).to_be_visible()
+        expect(cart.line(name).get_by_test_id("product-quantity")).to_have_value("2")
+        expect(cart.line_price(name)).to_have_text(f"${unit_price * 2:.2f}")
         expect(cart.cart_total).to_have_text(f"${unit_price * 2:.2f}")
 
 
@@ -92,6 +112,7 @@ def test_checkout_cash_on_delivery(page: Page, customer, pick_purchases):
     with allure.step("Cart -> sign in step: log in"):
         header.open_cart()
         cart.expect_cart_loaded()
+        cart_total = cart.cart_total.inner_text()  # what the customer is about to pay, e.g. "$14.15"
         cart.proceed_to_sign_in.click()
         cart.expect_sign_in_loaded()
         cart.sign_in(customer.email, customer.password)
@@ -113,6 +134,8 @@ def test_checkout_cash_on_delivery(page: Page, customer, pick_purchases):
     with allure.step("Order confirmation with invoice number"):
         expect(cart.order_confirmation).to_contain_text("Your invoice number is INV-")
         cart.expect_confirmation_loaded()
+    with allure.step("Open My account -> Invoices: the new invoice is listed with the total paid"):
+        check_invoice_in_my_invoices(page, cart_total)
 
 
 # ---------------------------------------------------------------- PROGRESSION
@@ -156,6 +179,7 @@ def test_checkout_credit_card_invalid_then_valid(page: Page, customer, pick_purc
         add_product_from_home(page, item["name"], quantity)
         header.open_cart()
         cart.expect_cart_loaded()
+        cart_total = cart.cart_total.inner_text()  # what the customer is about to pay, e.g. "$14.15"
         cart.proceed_to_sign_in.click()
         cart.expect_sign_in_loaded()
         cart.sign_in(customer.email, customer.password)
@@ -184,12 +208,14 @@ def test_checkout_credit_card_invalid_then_valid(page: Page, customer, pick_purc
     with allure.step("Order confirmation"):
         expect(cart.order_confirmation).to_contain_text("Your invoice number is INV-")
         cart.expect_confirmation_loaded()
+    with allure.step("Open My account -> Invoices: the new invoice is listed with the total paid"):
+        check_invoice_in_my_invoices(page, cart_total)
 
 
 @pytest.mark.progression
-def test_cart_quantity_change_and_remove(page: Page):
+def test_cart_quantity_change_and_remove(page: Page, catalog_products):
     header, cart = HeaderComponent(page), CheckoutPage(page)
-    first, second = "Slip Joint Pliers", "Thor Hammer"
+    first, second = (p["name"] for p in catalog_products(2))  # two random in-stock products
     with allure.step("Add two different products"):
         home = HomePage(page)
         home.open()
@@ -214,32 +240,60 @@ def test_cart_quantity_change_and_remove(page: Page):
 
 
 @pytest.mark.progression
-def test_catalog_filter_by_category_and_sort_by_price(page: Page):
+def test_catalog_filter_by_category_and_sort_by_price(page: Page, api):
     home = HomePage(page)
+    # Precondition via API: a brand that really has Hammer products, so the combined result is not empty.
+    hammer_id = next(c["id"] for c in api.get("/categories").json() if c["name"] == "Hammer")
+    in_range = {"between": "price,1,100", "is_rental": "false", "by_category": hammer_id, "page": 1}
+    hammers = api.get("/products", params=in_range).json()["data"]
+    brands: dict[str, dict] = {}
+    for p in hammers:
+        brands.setdefault(p["brand"]["name"], p["brand"])
+    brand = max(brands.values(), key=lambda b: sum(p["brand"]["id"] == b["id"] for p in hammers))
+    allure.dynamic.parameter("brand", brand["name"])
     with allure.step("Filter by the Hammer category"):
         home.open()
         home.expect_loaded()
         home.filter_by_category("Hammer")
         expect(home.product_names.first).to_contain_text("ammer")
         expect(home.product_names.filter(has_not_text=re.compile("hammer", re.I))).to_have_count(0)
-    with allure.step("Sort by price, low to high"):
-        cheapest = min(home.displayed_prices())
+    with allure.step(f"Add the brand filter '{brand['name']}', lower the max price and sort by price, low to high"):
+        home.filter_by_brand(brand["name"])
+        max_price = home.lower_max_price(steps=3)
         home.sort_by("Price (Low - High)")
-        expect(home.product_prices.first).to_have_text(f"${cheapest:.2f}")  # waits for the re-render
-        expect(home.product_names.filter(has_not_text=re.compile("hammer", re.I))).to_have_count(0)
+        expected = api.get("/products", params={**in_range, "by_brand": brand["id"], "between": f"price,1,{max_price}",
+                                                "sort": "price,asc"}).json()["data"]
+        assert expected, f"Setup: no {brand['name']} hammers up to ${max_price}"
+        expect(home.product_names).to_have_count(len(expected))
+    with allure.step("The screen shows exactly the API's list for the same filters, in price order"):
+        # web-first: waits until the re-sorted list is rendered (the count alone is right before the order is)
+        expect(home.product_names).to_have_text([p["name"] for p in expected])
         prices = home.displayed_prices()
-        assert len(prices) > 1
+        assert prices == [p["price"] for p in expected]
         assert prices == sorted(prices), f"prices are not non-decreasing: {prices}"
+        assert all(p <= max_price for p in prices), f"price above {max_price} shown"
+        expect(home.product_names.filter(has_not_text=re.compile("hammer", re.I))).to_have_count(0)
+        allure.attach(page.screenshot(), name="Combined filters", attachment_type=allure.attachment_type.PNG)
 
 
 @pytest.mark.progression
 @pytest.mark.parametrize("role", ["customer", "admin"])
 def test_access_control(page: Page, request, role):
+    """Customer: no admin menu, and every admin page is refused when opened by URL.
+    Admin: every admin page opens from the menu, and the admin can find a customer's account and order."""
     header, login = HeaderComponent(page), LoginPage(page)
     if role == "customer":
         customer = request.getfixturevalue("customer")
         email, password = customer.email, customer.password
     else:
+        # Precondition via API: a fresh customer with one order, for the admin to find on screen.
+        shopper, shopper_api = request.getfixturevalue("customer"), request.getfixturevalue("customer_api")
+        cart_id = shopper_api.create_cart()
+        [(product, quantity)] = request.getfixturevalue("pick_purchases")(1)
+        shopper_api.add_to_cart(cart_id, product["id"], quantity)
+        order = shopper_api.place_order(cart_id)
+        assert order.status_code == 201, f"Setup: order failed: {order.status_code} {order.text}"
+        invoice = order.json()
         email, password = request.getfixturevalue("admin_credentials")
     with allure.step(f"Log in as {role} through the sign-in screen"):
         home = HomePage(page)
@@ -256,16 +310,42 @@ def test_access_control(page: Page, request, role):
         header.open_user_menu()
         if role == "customer":
             expect(header.my_account_entry).to_be_visible()
-            expect(header.admin_dashboard_entry).to_have_count(0)
+            expect(page.locator("[data-test^='nav-admin-']")).to_have_count(0)
         else:
-            expect(header.admin_dashboard_entry).to_be_visible()
-    with allure.step("Open /admin/dashboard"):
-        if role == "customer":
-            page.goto("/admin/dashboard")
-            expect(page).not_to_have_url(re.compile(r"/admin/dashboard"))
-            expect(AdminDashboardPage(page).title).to_have_count(0)
-        else:
-            header.admin_dashboard_entry.click()
-            expect(page).to_have_url(re.compile(r"/admin/dashboard$"))
-            expect(AdminDashboardPage(page).title).to_have_text("Sales over the years")
-            AdminDashboardPage(page).expect_loaded()
+            for menu_id, _, _, menu in ADMIN_PAGES:
+                if menu == "user":
+                    expect(page.get_by_test_id(menu_id)).to_be_visible()
+            expect(page.get_by_role("button", name="Reports")).to_be_visible()
+        header.open_user_menu()  # close it again
+    if role == "customer":
+        expect(page.get_by_role("button", name="Reports")).to_have_count(0)  # no reports submenu either
+        for _, path, title, _ in ADMIN_PAGES:
+            with check, allure.step(f"Customer opens {path} by URL: refused"):
+                page.goto(path)
+                expect(page).not_to_have_url(re.compile(re.escape(path) + "$"))
+                expect(page.get_by_test_id("page-title").filter(has_text=title)).to_have_count(0)
+        return
+    for menu_id, path, title, menu in ADMIN_PAGES:
+        with check, allure.step(f"Admin opens '{title}' from the menu"):
+            open_admin_menu(page, menu)
+            page.get_by_test_id(menu_id).click()
+            expect(page).to_have_url(re.compile(re.escape(path) + "$"))
+            expect(page.get_by_test_id("page-title")).to_have_text(title)
+            if path == "/admin/dashboard":
+                AdminDashboardPage(page).expect_loaded()
+    with check, allure.step("Admin finds the customer's order (search by invoice number)"):
+        header.open_user_menu()
+        page.get_by_test_id("nav-admin-orders").click()
+        orders = AdminOrdersPage(page)
+        orders.search(invoice["invoice_number"])
+        row = orders.row_with(invoice["invoice_number"])
+        expect(row).to_have_count(1)
+        expect(row).to_contain_text(f"{invoice['total']:.2f}")
+    with check, allure.step("Admin finds the customer's account (search by email)"):
+        header.open_user_menu()
+        page.get_by_test_id("nav-admin-users").click()
+        users = AdminUsersPage(page)
+        users.search(shopper.email)
+        row = users.row_with(shopper.email)
+        expect(row).to_have_count(1)
+        expect(row).to_contain_text(f"{shopper.first_name} {shopper.last_name}")

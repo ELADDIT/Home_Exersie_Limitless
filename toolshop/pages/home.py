@@ -1,3 +1,5 @@
+import re
+
 from playwright.sync_api import Page, expect
 
 from .header import HeaderComponent
@@ -42,8 +44,12 @@ class HomePage:
             self.search_input.fill(text)
             self.search_button.click()
 
+    def product_card_name(self, name: str):
+        """The card whose name is exactly `name` ("Hammer" must not match "Claw Hammer")."""
+        return self.product_names.filter(has_text=re.compile(rf"^\s*{re.escape(name)}\s*$"))
+
     def open_product(self, name: str) -> None:
-        self.product_names.filter(has_text=name).first.click()
+        self.product_card_name(name).first.click()
 
     def filter_by_category(self, category: str) -> None:
         # the filter panel has no data-test per category label, so use the visible label text

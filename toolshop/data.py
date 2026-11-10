@@ -17,6 +17,10 @@ BILLING_ADDRESS = {
 }
 
 
+# Products with special purchase rules that generic pickers must skip (app rule: max one Thor Hammer per customer).
+PURCHASE_LIMITED = {"Thor Hammer"}
+
+
 def strong_password() -> str:
     """Meets the API policy: >= 8 chars, upper + lower case, digit and symbol."""
     return fake.password(length=14, special_chars=True, digits=True, upper_case=True, lower_case=True)

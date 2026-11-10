@@ -1,5 +1,9 @@
+import random
+
 import allure
 import pytest
+
+from toolshop.data import PURCHASE_LIMITED
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -59,3 +63,21 @@ def _require_shop_reachable(_bot_check_result):
     that isn't the store's. They run normally wherever the shop loads."""
     if _bot_check_result:
         pytest.skip(_bot_check_result)
+
+
+@pytest.fixture
+def catalog_products(api):
+    """Pick products for a UI journey from the live catalog instead of hard-coding seed names:
+    random in-stock, non-rental products from the first catalog page (the page the shop opens on).
+    Returns a function: pick(count) -> list of product dicts."""
+    def pick(count: int = 1) -> list[dict]:
+        r = api.get("/products", params={"page": 1})
+        assert r.status_code == 200, f"Setup: product list failed: {r.status_code}"
+        pool = [p for p in r.json()["data"]
+                if p["in_stock"] and not p["is_rental"] and p["name"] not in PURCHASE_LIMITED
+                and " with " not in p["name"].lower()]  # known bug: search can't find names containing "with"
+        assert len(pool) >= count, f"Setup: only {len(pool)} in-stock products on the first catalog page"
+        picked = random.sample(pool, count)
+        allure.dynamic.parameter("products", ", ".join(p["name"] for p in picked))
+        return picked
+    return pick

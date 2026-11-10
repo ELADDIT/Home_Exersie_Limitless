@@ -9,15 +9,16 @@ Where the screen shows a filtered list, the expected products come from the API 
 filter (the API is the oracle; the step under test is still done only through the screen).
 """
 import re
+import uuid
 
 import allure
 import pytest
 from playwright.sync_api import Page, expect
 from pytest_check import check
 
-from toolshop.data import unique_email
 from toolshop.pages import (ComparisonPage, ContactPage, FavoritesPage, HeaderComponent, HomePage, LoginPage,
                             ProductPage, RentalsPage)
+from toolshop.pages.messages import MessagesPage
 
 UI_DEFAULT_FILTER = {"between": "price,1,100", "is_rental": "false", "page": 1}  # what the shop page applies
 
@@ -93,26 +94,34 @@ def test_minor_features_tour(page: Page, api, customer):
         expect(rental_cards.first).not_to_be_empty()
         snap(page, "Rentals")
 
-    with check, allure.step("Contact form: empty submit shows errors, then a valid message is sent"):
-        home.open()
-        home.expect_loaded()
-        header.contact_link.click()
-        contact = ContactPage(page)
-        contact.expect_loaded()
-        contact.submit_button.click()
-        expect(contact.errors).to_have_count(5)  # first name, last name, email, subject, message
-        contact.send("Qa", "Automation", unique_email(), "Webmaster",
-                     "Automated QA check of the contact form. Please ignore this message, thank you.")
-        expect(contact.success).to_be_visible()
-        snap(page, "Contact form")
-
-    with check, allure.step("Favorites: a logged-in customer adds a product and finds it under My favorites"):
+    with check, allure.step("Contact form: a logged-in customer sends a message (empty submit first) and finds it under My messages"):
         home.open()
         home.expect_loaded()
         header.open_sign_in()
         LoginPage(page).expect_loaded()
         LoginPage(page).login(customer.email, customer.password)
         expect(header.user_menu).to_be_visible()
+        header.contact_link.click()
+        contact = ContactPage(page)
+        contact.expect_loaded()
+        contact.submit_button.click()
+        expect(contact.errors).to_have_count(2)  # subject, message (name and email come from the account)
+        marker = uuid.uuid4().hex[:12]
+        contact.send("Webmaster", f"{marker} Automated QA check of the contact form. Please ignore this message.")
+        expect(contact.success).to_be_visible()
+        home.open()
+        home.expect_loaded()
+        header.open_user_menu()
+        page.get_by_test_id("nav-my-messages").click()  # header.py has no entry for it
+        messages = MessagesPage(page)
+        messages.expect_loaded()
+        row = messages.row_with(marker)
+        expect(row).to_have_count(1)
+        expect(row).to_contain_text(re.compile("webmaster", re.IGNORECASE))  # the list shows the subject (lower-cased)
+        expect(row).to_contain_text("NEW")
+        snap(page, "Contact form")
+
+    with check, allure.step("Favorites: a logged-in customer adds a product and finds it under My favorites"):
         home.open()
         home.expect_loaded()
         name = home.product_names.first.inner_text().strip()

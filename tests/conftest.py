@@ -13,7 +13,7 @@ import pytest
 
 from toolshop.api import ToolshopApi
 from toolshop.config import Settings
-from toolshop.data import Customer
+from toolshop.data import PURCHASE_LIMITED, Customer
 
 UI_TEST_BUDGET = 10  # brief: 5-10 browser tests in total, each parametrized case counts
 
@@ -135,7 +135,6 @@ def products(api) -> list[dict]:
 
 
 MAX_ORDER_QUANTITY = 3  # small, but > 1 so multi-unit orders are exercised
-PURCHASE_LIMITED = {"Thor Hammer"}  # app rule: max one per customer, so the generic picker skips it
 
 
 @pytest.fixture

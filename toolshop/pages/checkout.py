@@ -1,3 +1,5 @@
+import re
+
 from playwright.sync_api import Locator, Page
 
 from .header import HeaderComponent
@@ -77,7 +79,9 @@ class CheckoutPage:
 
     # ---- cart ----
     def line(self, product_name: str) -> Locator:
-        return self.lines.filter(has_text=product_name)
+        """The cart line for exactly this product ("Hammer" must not match "Thor Hammer")."""
+        exact = re.compile(rf"^\s*{re.escape(product_name)}\s*$")
+        return self.lines.filter(has=self.page.get_by_test_id("product-title").filter(has_text=exact))
 
     def line_price(self, product_name: str) -> Locator:
         return self.line(product_name).get_by_test_id("line-price")
