@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/invoices
+
+Request body:
+{"billing_street": "Lesingel 8", "billing_state": "Noord-Holland", "billing_country": "NL", "billing_postal_code": "1012AB", "payment_method": "cash-on-delivery", "payment_details": {}, "cart_id": "01m72th04ez87n2nx804tkka6x"}
+
+Response 422:
+{"billing_city":["The billing city field is required."]}

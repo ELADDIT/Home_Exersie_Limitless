@@ -1,7 +1,0 @@
-GET https://api.practicesoftwaretesting.com/carts/01m72t7ccfbmwb57ehgjd47mxr
-
-Request body:
-
-
-Response 200:
-{"id":"01m72t7ccfbmwb57ehgjd47mxr","additional_discount_percentage":null,"lat":null,"lng":null,"cart_items":[]}
