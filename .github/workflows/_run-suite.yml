@@ -23,25 +23,18 @@ jobs:
     name: ${{ inputs.suite }} (${{ inputs.env }})
     runs-on: ubuntu-latest
     timeout-minutes: 5 # brief: the pipeline must finish within 5 minutes
+    # Official Playwright image: browsers + system libraries preinstalled (installing them took ~2 min).
+    # Its version must match `playwright==` in requirements.txt.
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.64.1-noble
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: pip
-
       - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Cache Playwright browser
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
-
-      - name: Install Chromium
-        run: python -m playwright install --with-deps chromium
+        run: |
+          python3 -m venv /opt/venv
+          /opt/venv/bin/pip install -q -r requirements.txt
+          echo "/opt/venv/bin" >> "$GITHUB_PATH"
 
       - name: Run ${{ inputs.suite }} tests (4 workers)
         env:
