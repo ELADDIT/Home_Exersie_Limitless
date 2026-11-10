@@ -1,37 +1,348 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Toolshop Test Dashboard</title>
-  <style>
-    :root { --bg: #f7f7f5; --fg: #1d1d1b; --muted: #6b6b66; --card: #ffffff; --line: #e2e2dd; --accent: #2f5d8a; }
-    @media (prefers-color-scheme: dark) {
-      :root { --bg: #161615; --fg: #ececea; --muted: #9a9a94; --card: #20201f; --line: #33332f; --accent: #8db4dc; }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toolshop Test Dashboard</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #fcfcfb; --surface-2: #f3f2ee;
+    --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+    --accent: #2a78d6;
+    --good: #0ca30c; --good-text: #006300; --critical: #d03b3b; --serious: #ec835a; --known: #b5b3ab;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232322;
+      --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+      --accent: #3987e5; --good-text: #0ca30c; --known: #5f5e59;
     }
-    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
-    main { max-width: 760px; margin: 0 auto; padding: 40px 16px; }
-    h1 { font-size: 1.6rem; margin: 0 0 4px; }
-    p { color: var(--muted); margin: 0 0 28px; }
-    .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-    a.card { display: block; padding: 18px; background: var(--card); border: 1px solid var(--line);
-             border-radius: 10px; color: inherit; text-decoration: none; }
-    a.card:hover { border-color: var(--accent); }
-    .card strong { display: block; color: var(--accent); margin-bottom: 4px; }
-    .card span { color: var(--muted); font-size: .92rem; }
-  </style>
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232322;
+    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --accent: #3987e5; --good-text: #0ca30c; --known: #5f5e59;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink);
+         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1120px; margin: 0 auto; padding: 28px 16px 64px; }
+  h1 { font-size: 1.5rem; margin: 0; }
+  h2 { font-size: 1.05rem; margin: 36px 0 12px; }
+  .sub { color: var(--ink-2); margin: 4px 0 20px; }
+  a { color: var(--accent); }
+  /* filters: one row above everything they scope */
+  .filters { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center;
+             padding: 12px 0; border-bottom: 1px solid var(--grid); margin-bottom: 20px; }
+  .filter { display: flex; align-items: center; gap: 8px; }
+  .filter > span { color: var(--ink-2); font-size: .85rem; }
+  .seg { display: inline-flex; border: 1px solid var(--ring); border-radius: 8px; overflow: hidden; background: var(--surface); }
+  .seg button { font: inherit; font-size: .85rem; border: 0; background: none; color: var(--ink-2);
+                padding: 5px 11px; cursor: pointer; }
+  .seg button + button { border-left: 1px solid var(--ring); }
+  .seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--ink); font-weight: 600; }
+  .seg button:focus-visible, .col:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* status banner + cards */
+  .banner { display: flex; gap: 10px; align-items: center; padding: 12px 14px; border-radius: 10px;
+            background: var(--surface); border: 1px solid var(--ring); margin-bottom: 16px; font-weight: 600; }
+  .cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+  .card { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 14px 16px; }
+  .card h3 { margin: 0 0 6px; font-size: .95rem; display: flex; flex-wrap: wrap; align-items: center;
+             justify-content: space-between; gap: 4px 8px; }
+  .card h3 > span:first-child { white-space: nowrap; }
+  .meta { color: var(--muted); font-size: .8rem; margin-bottom: 10px; }
+  .nums { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
+  .num b { display: block; font-size: 1.25rem; font-weight: 600; }
+  .num span { color: var(--ink-2); font-size: .75rem; }
+  .links { display: flex; gap: 14px; font-size: .85rem; }
+  .chip { display: inline-flex; align-items: center; gap: 5px; font-size: .78rem; font-weight: 600;
+          padding: 1px 8px; border-radius: 999px; background: var(--surface-2); color: var(--ink); white-space: nowrap; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
+  /* charts */
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: .82rem; color: var(--ink-2); margin-bottom: 10px; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .charts { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+  .chart { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 12px 14px; position: relative; }
+  .chart h4 { margin: 0 0 6px; font-size: .88rem; }
+  .chart svg { display: block; width: 100%; height: 170px; overflow: visible; }
+  .empty { color: var(--muted); font-size: .85rem; padding: 18px 0; }
+  .tip { position: fixed; pointer-events: none; z-index: 10; background: var(--surface); color: var(--ink);
+         border: 1px solid var(--ring); border-radius: 8px; padding: 8px 10px; font-size: .8rem;
+         box-shadow: 0 4px 16px rgba(0,0,0,.12); display: none; min-width: 150px; }
+  .tip .row { display: flex; justify-content: space-between; gap: 14px; align-items: center; }
+  .tip .row b { font-variant-numeric: tabular-nums; }
+  .tip .key { display: inline-block; width: 12px; height: 2px; margin-right: 6px; vertical-align: middle; }
+  .tip .head { color: var(--ink-2); margin-bottom: 4px; }
+  /* tables */
+  .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  th { color: var(--ink-2); font-weight: 600; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; }
+  td.name { white-space: normal; min-width: 260px; }
+  tr:last-child td { border-bottom: 0; }
+  footer { margin-top: 36px; color: var(--muted); font-size: .8rem; }
+</style>
 </head>
 <body>
 <main>
   <h1>Toolshop test dashboard</h1>
-  <p>Allure reports published by GitHub Actions. Each report shows the latest run with failure details,
-     and the Overview/Graphs tabs show trends across previous runs.</p>
-  <div class="grid">
-    <a class="card" href="prod/sanity/"><strong>Sanity · prod</strong><span>Every push. Is the store fundamentally working?</span></a>
-    <a class="card" href="prod/progression/"><strong>Progression · prod</strong><span>PRs, merges to main, nightly, on demand.</span></a>
-    <a class="card" href="with-bugs/sanity/"><strong>Sanity · with-bugs</strong><span>On demand. Bug-seeded environment, failures expected.</span></a>
-    <a class="card" href="with-bugs/progression/"><strong>Progression · with-bugs</strong><span>On demand. Bug-seeded environment, failures expected.</span></a>
+  <p class="sub">Results of the automated test suite for practicesoftwaretesting.com. Updated after every run on
+    <code>main</code> and every night. Use the filters to narrow everything below.</p>
+
+  <div class="filters" role="group" aria-label="Filters">
+    <div class="filter"><span>Environment</span><div class="seg" data-filter="env"></div></div>
+    <div class="filter"><span>Test set</span><div class="seg" data-filter="set"></div></div>
+    <div class="filter"><span>Period</span><div class="seg" data-filter="period"></div></div>
   </div>
+
+  <div class="banner" id="banner" aria-live="polite">Loading results…</div>
+  <div class="cards" id="cards"></div>
+
+  <h2>Results per run</h2>
+  <div class="legend" id="legend"></div>
+  <div class="charts" id="charts"></div>
+
+  <h2>Failures in the latest runs</h2>
+  <div id="failures"></div>
+
+  <h2>Run history</h2>
+  <div class="table-wrap"><table id="history"></table></div>
+
+  <footer>Passed, failed and broken come from the Allure report of each run. <b>Known bugs</b> are tests
+    marked "expected to fail" for confirmed app bugs. <b>Broken</b> means the test could not finish, for example
+    when the shared site was slow or unreachable, rather than a failed check.
+    The <code>with-bugs</code> environment is a copy of the shop with deliberate bugs, so failures there are expected.</footer>
 </main>
+<div class="tip" id="tip" role="status"></div>
+
+<script>
+const REPORTS = [
+  { env: "prod", set: "sanity" }, { env: "prod", set: "progression" },
+  { env: "with-bugs", set: "sanity" }, { env: "with-bugs", set: "progression" },
+];
+const SERIES = [   // stacking order bottom -> top; status colors carry state, always with labels
+  { key: "passed",  label: "Passed",     color: "var(--good)" },
+  { key: "failed",  label: "Failed",     color: "var(--critical)" },
+  { key: "broken",  label: "Broken",     color: "var(--serious)" },
+  { key: "skipped", label: "Known bugs", color: "var(--known)" },
+];
+const FILTERS = {
+  env: [["all", "All"], ["prod", "prod"], ["with-bugs", "with-bugs"]],
+  set: [["all", "All"], ["sanity", "Sanity"], ["progression", "Progression"]],
+  period: [["7", "Last 7 days"], ["30", "Last 30 days"], ["all", "All runs"]],
+};
+const params = new URLSearchParams(location.search);
+const state = { env: params.get("env") || "all", set: params.get("set") || "all", period: params.get("period") || "30" };
+const data = {};   // "env/set" -> { runs: [...], failures: [...], reportUrl }
+
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "text") n.textContent = v; else if (k === "style") n.style.cssText = v; else n.setAttribute(k, v);
+  }
+  kids.flat().forEach(k => k != null && n.append(k));
+  return n;
+};
+const svgEl = (tag, attrs = {}) => {
+  const n = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+  return n;
+};
+const fmtDate = iso => iso ? new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "date unknown";
+const ago = iso => {
+  if (!iso) return "";
+  const m = Math.round((Date.now() - new Date(iso)) / 60000);
+  return m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`;
+};
+const secs = ms => ms ? `${Math.round(ms / 1000)} s` : "–";
+
+async function getJson(url) {
+  try { const r = await fetch(url, { cache: "no-store" }); return r.ok ? await r.json() : null; } catch { return null; }
+}
+
+async function load(rep) {
+  const base = `${rep.env}/${rep.set}/`;
+  let runs = await getJson(base + "runs.json");
+  if (!runs) {   // reports published before the run log existed: fall back to Allure's own trend (no dates)
+    const trend = await getJson(base + "widgets/history-trend.json") || [];
+    runs = trend.slice().reverse().map(t => ({ run: t.buildOrder, date: null, trigger: "", commit: "", ci_url: "", stats: t.data, duration_ms: 0 }));
+  }
+  const failures = [];
+  const suites = await getJson(base + "data/suites.json");
+  (function walk(node) {
+    if (node.children) return node.children.forEach(walk);
+    if (node.status === "failed" || node.status === "broken")
+      failures.push({ name: node.name, status: node.status, url: `${base}#suites/${node.parentUid}/${node.uid}/` });
+  })(suites || {});
+  data[`${rep.env}/${rep.set}`] = { runs, failures, reportUrl: base };
+}
+
+function visibleReports() {
+  return REPORTS.filter(r => (state.env === "all" || r.env === state.env) && (state.set === "all" || r.set === state.set));
+}
+function inPeriod(run) {
+  if (state.period === "all" || !run.date) return true;
+  return Date.now() - new Date(run.date) <= Number(state.period) * 86400000;
+}
+function statusOf(run) {
+  if (!run) return { label: "No runs yet", icon: "–", color: "var(--muted)" };
+  const s = run.stats;
+  if (s.failed > 0) return { label: "Failing", icon: "✕", color: "var(--critical)" };
+  if (s.broken > 0) return { label: "Broken", icon: "!", color: "var(--serious)" };
+  return { label: "Passing", icon: "✓", color: "var(--good)" };
+}
+const chip = st => el("span", { class: "chip" }, el("span", { class: "dot", style: `background:${st.color}` }), `${st.icon} ${st.label}`);
+
+function renderFilters() {
+  document.querySelectorAll(".seg").forEach(seg => {
+    const name = seg.dataset.filter;
+    seg.replaceChildren(...FILTERS[name].map(([value, label]) => {
+      const b = el("button", { type: "button", "aria-pressed": String(state[name] === value), text: label });
+      b.onclick = () => {
+        state[name] = value;
+        const q = new URLSearchParams(state); history.replaceState(null, "", "?" + q);
+        render();
+      };
+      return b;
+    }));
+  });
+}
+
+function renderCards(reps) {
+  const latest = reps.map(r => data[`${r.env}/${r.set}`].runs.at(-1));
+  const withRuns = latest.filter(Boolean);
+  const failing = withRuns.filter(r => statusOf(r).label !== "Passing").length;
+  const banner = document.getElementById("banner");
+  const st = !withRuns.length ? statusOf(null) : failing ? { label: "", icon: "✕", color: "var(--critical)" } : statusOf(withRuns[0]);
+  banner.replaceChildren(el("span", { class: "dot", style: `background:${st.color};width:10px;height:10px` }),
+    !withRuns.length ? "No runs yet for this selection."
+      : failing ? `${failing} of ${withRuns.length} latest runs need attention.`
+      : `All ${withRuns.length} latest runs are passing.`);
+
+  document.getElementById("cards").replaceChildren(...reps.map((r, i) => {
+    const d = data[`${r.env}/${r.set}`], run = latest[i], s = run?.stats || {};
+    const card = el("div", { class: "card" },
+      el("h3", {}, el("span", { text: `${r.set[0].toUpperCase() + r.set.slice(1)} · ${r.env}` }), chip(statusOf(run))));
+    if (!run) {
+      card.append(el("div", { class: "empty", text: r.env === "with-bugs" ? "Runs nightly and on demand (Actions → Run workflow)." : "No runs published yet." }));
+      return card;
+    }
+    card.append(
+      el("div", { class: "meta", text: [ago(run.date), run.trigger, run.commit && `commit ${run.commit}`, `run #${run.run}`].filter(Boolean).join(" · ") }),
+      el("div", { class: "nums" }, ...[["passed", "Passed"], ["failed", "Failed"], ["broken", "Broken"], ["skipped", "Known bugs"]]
+        .map(([k, l]) => el("div", { class: "num" }, el("b", { text: String(s[k] ?? 0) }), el("span", { text: l })))),
+      el("div", { class: "links" }, el("a", { href: d.reportUrl, text: "Full report →" }),
+        run.ci_url ? el("a", { href: run.ci_url, text: "CI run →" }) : null));
+    return card;
+  }));
+}
+
+function renderCharts(reps) {
+  document.getElementById("legend").replaceChildren(...SERIES.map(s =>
+    el("span", {}, el("i", { style: `background:${s.color}` }), s.label)));
+  const tip = document.getElementById("tip");
+  document.getElementById("charts").replaceChildren(...reps.map(r => {
+    const runs = data[`${r.env}/${r.set}`].runs.filter(inPeriod).slice(-30);
+    const box = el("div", { class: "chart" }, el("h4", { text: `${r.set[0].toUpperCase() + r.set.slice(1)} · ${r.env}` }));
+    if (!runs.length) { box.append(el("div", { class: "empty", text: "No runs in this period." })); return box; }
+    const W = 320, H = 170, L = 34, B = 22, T = 6;
+    const max = Math.max(...runs.map(x => x.stats.total || 0), 1);
+    const step = max <= 10 ? 2 : max <= 50 ? 10 : max <= 200 ? 50 : 100;
+    const top = Math.ceil(max / step) * step, y = v => T + (H - T - B) * (1 - v / top);
+    const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "img",
+      "aria-label": `Test results per run for ${r.set} on ${r.env}; see the run history table for values` });
+    for (let v = 0; v <= top; v += step) {
+      svg.append(svgEl("line", { x1: L, x2: W, y1: y(v), y2: y(v), stroke: v ? "var(--grid)" : "var(--axis)", "stroke-width": 1 }));
+      const t = svgEl("text", { x: L - 6, y: y(v) + 3, "text-anchor": "end", "font-size": 10, fill: "var(--muted)" }); t.textContent = v; svg.append(t);
+    }
+    const slot = (W - L) / runs.length, bw = Math.min(24, slot * 0.6);
+    runs.forEach((run, i) => {
+      const x = L + slot * i + (slot - bw) / 2;
+      const g = svgEl("g", { class: "col", tabindex: 0,
+        "aria-label": `Run ${run.run}, ${fmtDate(run.date)}: ` + SERIES.map(s => `${run.stats[s.key] || 0} ${s.label.toLowerCase()}`).join(", ") });
+      g.append(svgEl("rect", { x: L + slot * i, y: T, width: slot, height: H - T - B, fill: "transparent" }));   // hit area
+      let acc = 0;
+      const segs = SERIES.filter(s => run.stats[s.key] > 0);
+      segs.forEach((s, j) => {
+        const v = run.stats[s.key], y0 = y(acc), y1 = y(acc + v), gap = j < segs.length - 1 ? 2 : 0;
+        const h = Math.max(1, y0 - y1 - gap), isTop = j === segs.length - 1, rad = isTop ? Math.min(4, h, bw / 2) : 0;
+        const yTop = y1 + gap;
+        // 2px surface gap between stacked segments; only the top segment gets the 4px rounded end
+        g.append(svgEl("path", { fill: s.color, d:
+          `M${x},${y0} V${yTop + rad} Q${x},${yTop} ${x + rad},${yTop} H${x + bw - rad} Q${x + bw},${yTop} ${x + bw},${yTop + rad} V${y0} Z` }));
+        acc += v;
+      });
+      if (i === runs.length - 1 || i === 0) {
+        const t = svgEl("text", { x: x + bw / 2, y: H - 6, "text-anchor": i ? "end" : "start", "font-size": 10, fill: "var(--muted)" });
+        t.textContent = run.date ? new Date(run.date).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : `#${run.run}`;
+        svg.append(t);
+      }
+      const show = ev => {
+        tip.replaceChildren(el("div", { class: "head", text: `Run #${run.run} · ${fmtDate(run.date)}` }),
+          ...SERIES.map(s => el("div", { class: "row" },
+            el("span", {}, el("span", { class: "key", style: `background:${s.color}` }), s.label), el("b", { text: String(run.stats[s.key] || 0) }))),
+          el("div", { class: "head", style: "margin:4px 0 0", text: `${secs(run.duration_ms)}${run.trigger ? " · " + run.trigger : ""}` }));
+        tip.style.display = "block";
+        const rect = ev.target.closest("g").getBoundingClientRect();
+        const left = Math.min(window.innerWidth - tip.offsetWidth - 8, Math.max(8, rect.left + rect.width / 2 - tip.offsetWidth / 2));
+        tip.style.left = left + "px"; tip.style.top = Math.max(8, rect.top - tip.offsetHeight - 8) + "px";
+        g.style.opacity = .85;
+      };
+      const hide = () => { tip.style.display = "none"; g.style.opacity = 1; };
+      g.addEventListener("pointerenter", show); g.addEventListener("focus", show);
+      g.addEventListener("pointerleave", hide); g.addEventListener("blur", hide);
+      svg.append(g);
+    });
+    box.append(svg);
+    return box;
+  }));
+}
+
+function renderFailures(reps) {
+  const rows = reps.flatMap(r => data[`${r.env}/${r.set}`].failures.map(f => ({ ...f, where: `${r.set} · ${r.env}` })));
+  const host = document.getElementById("failures");
+  if (!rows.length) {
+    host.replaceChildren(el("div", { class: "banner" }, el("span", { class: "dot", style: "background:var(--good)" }), "✓ No failed or broken tests in the latest runs of this selection."));
+    return;
+  }
+  host.replaceChildren(el("div", { class: "table-wrap" }, el("table", {},
+    el("thead", {}, el("tr", {}, ...["Test", "Status", "Where", ""].map(h => el("th", { text: h })))),
+    el("tbody", {}, ...rows.map(f => el("tr", {},
+      el("td", { class: "name", text: f.name }),
+      el("td", {}, chip(f.status === "failed" ? { label: "Failed", icon: "✕", color: "var(--critical)" } : { label: "Broken", icon: "!", color: "var(--serious)" })),
+      el("td", { text: f.where }),
+      el("td", {}, el("a", { href: f.url, text: "Details →" }))))))));
+}
+
+function renderHistory(reps) {
+  const rows = reps.flatMap(r => data[`${r.env}/${r.set}`].runs.filter(inPeriod).map(run => ({ ...run, r })))
+    .sort((a, b) => (b.date || "").localeCompare(a.date || "") || b.run - a.run);
+  const table = document.getElementById("history");
+  const head = ["When", "Set", "Env", "Trigger", "Commit", "Passed", "Failed", "Broken", "Known bugs", "Duration", ""];
+  table.replaceChildren(el("thead", {}, el("tr", {}, ...head.map(h => el("th", { text: h })))),
+    el("tbody", {}, ...(rows.length ? rows.map(run => el("tr", {},
+      el("td", { text: fmtDate(run.date) }), el("td", { text: run.r.set }), el("td", { text: run.r.env }),
+      el("td", { text: run.trigger || "–" }), el("td", { text: run.commit || "–" }),
+      ...["passed", "failed", "broken", "skipped"].map(k => el("td", { class: "n", text: String(run.stats[k] || 0) })),
+      el("td", { class: "n", text: secs(run.duration_ms) }),
+      el("td", {}, run.ci_url ? el("a", { href: run.ci_url, text: "CI run →" }) : "")))
+      : [el("tr", {}, el("td", { colspan: head.length, class: "empty", text: "No runs in this period." }))])));
+}
+
+function render() {
+  renderFilters();
+  const reps = visibleReports();
+  renderCards(reps); renderCharts(reps); renderFailures(reps); renderHistory(reps);
+}
+
+Promise.all(REPORTS.map(load)).then(render);
+</script>
 </body>
 </html>
