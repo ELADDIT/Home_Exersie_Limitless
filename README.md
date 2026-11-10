@@ -2,7 +2,7 @@
 
 Automated tests for [Toolshop](https://practicesoftwaretesting.com), a practice online hardware store with a web UI and a REST API. This repository holds the first version of its test suite.
 
-**Dashboard (no login needed): https://eladdit.github.io/Home_Exersie_Limitless/**
+**Dashboard (no login needed):** [eladdit.github.io/Home_Exersie_Limitless](https://eladdit.github.io/Home_Exersie_Limitless/)
 It shows the latest run with failure details (steps, screenshots, request/response), plus trend graphs across runs, for each test set and environment.
 
 | What | Where |
@@ -98,7 +98,12 @@ All were confirmed by hand on 2026-11-10 and are covered by expected-to-fail tes
 
 ## Time spent
 
-**TODO (Elad): fill in before submitting.** The AI-assisted session ran from 12:25 Israel time on 2026-11-10; add the time spent drafting the planning prompt with Gemini, manual exploration (e.g. the PDF check) and reviewing.
+About **2 hours** so far on 2026-11-10, starting at 12:15 Israel time:
+
+- ~10 minutes reading the brief, looking at the site, and drafting the planning prompt with Gemini;
+- the rest in one Claude Code session (from 12:25): planning, building, reviewing every test and screenshot, CI and the dashboard, and documentation.
+
+This will be updated with the final total at submission.
 
 ## Notes and assumptions
 
