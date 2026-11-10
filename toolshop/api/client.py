@@ -87,6 +87,14 @@ class ToolshopApi:
                     payment_details: dict | None = None) -> requests.Response:
         return self.post("/invoices", json=billing_payload(cart_id, payment_method, payment_details))
 
+    def stock_level(self, product_id: str) -> int:
+        """Units in stock. Only an ADMIN client sees the number (customers/guests get true/false)."""
+        r = self.get(f"/products/{product_id}")
+        assert r.status_code == 200, f"Setup: product lookup failed: {r.status_code} {r.text}"
+        stock = r.json()["in_stock"]
+        assert type(stock) is int, f"Setup: expected a stock count (admin client required), got {stock!r}"
+        return stock
+
     def in_stock_products(self, count: int = 2) -> list[dict]:
         """Purchasable products from the live catalog (ids differ between environments)."""
         r = self.get("/products", params={"page": 1})

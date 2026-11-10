@@ -10,10 +10,11 @@ def other_customer(api) -> Customer:
 
 
 @pytest.fixture
-def cart_with_items(customer_api, products) -> tuple[str, list[tuple[dict, int]]]:
-    """A new cart owned by a fresh customer holding both catalog products (quantities 2 and 3)."""
+def cart_with_items(customer_api, pick_purchases) -> tuple[str, list[tuple[dict, int]]]:
+    """A new cart for a fresh customer with 2 random in-stock products in small random quantities
+    (bounded by real stock), so repeated runs don't drain one product on the shared site."""
     cart_id = customer_api.create_cart()
-    lines = list(zip(products, (2, 3)))
+    lines = pick_purchases(2)
     for product, qty in lines:
         customer_api.add_to_cart(cart_id, product["id"], qty)
     return cart_id, lines
