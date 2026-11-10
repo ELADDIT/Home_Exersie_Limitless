@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/payment/check
+
+Request body:
+{"payment_method": "credit-card", "payment_details": {}}
+
+Response 422:
+{"message":"The payment details.credit card number field is required. (and 3 more errors)","errors":{"payment_details.credit_card_number":["The payment details.credit card number field is required."],"payment_details.expiration_date":["The payment details.expiration date field is required."],"payment_details.cvv":["The payment details.cvv field is required."],"payment_details.card_holder_name":["The payment details.card holder name field is required."]}}

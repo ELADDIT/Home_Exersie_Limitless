@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/payment/check
+
+Request body:
+{"payment_method": "gift-card", "payment_details": {}}
+
+Response 422:
+{"message":"The payment details.gift card number field is required. (and 1 more error)","errors":{"payment_details.gift_card_number":["The payment details.gift card number field is required."],"payment_details.validation_code":["The payment details.validation code field is required."]}}

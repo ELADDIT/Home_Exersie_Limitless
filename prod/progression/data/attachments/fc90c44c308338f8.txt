@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/register
+
+Request body:
+{"first_name": "77777777777777777777777777777777777777777", "last_name": "Jones", "email": "qa.c11cefcbf6474dca8099c1ea00e5c47c@example.com", "password": "()hmiWFrV5MhTO", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
+
+Response 422:
+{"first_name":["The first name field must not be greater than 40 characters."]}

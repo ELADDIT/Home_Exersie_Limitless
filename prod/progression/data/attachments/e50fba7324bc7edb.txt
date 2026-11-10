@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/reports/total-sales-of-years
+
+Request body:
+
+
+Response 401:
+{"message":"Unauthorized"}

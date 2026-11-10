@@ -1,0 +1,18 @@
+[
+ {
+  "run": 3,
+  "date": "2026-11-10T12:23:06Z",
+  "trigger": "push",
+  "commit": "d92e430",
+  "ci_url": "https://github.com/ELADDIT/Home_Exersie_Limitless/actions/runs/42814913713",
+  "stats": {
+   "failed": 6,
+   "broken": 1,
+   "skipped": 18,
+   "passed": 119,
+   "unknown": 0,
+   "total": 144
+  },
+  "duration_ms": 102729
+ }
+]

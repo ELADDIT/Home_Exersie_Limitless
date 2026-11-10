@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/users
+
+Request body:
+
+
+Response 403:
+{"message":"Forbidden"}

@@ -1,0 +1,7 @@
+DELETE https://api.practicesoftwaretesting.com/brands/00000000000000000000000000
+
+Request body:
+
+
+Response 403:
+{"message":"Forbidden"}

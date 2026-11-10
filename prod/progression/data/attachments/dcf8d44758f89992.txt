@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/payment/check
+
+Request body:
+{"payment_method": "cash-on-delivery", "payment_details": {}}
+
+Response 200:
+{"message":"Payment was successful"}

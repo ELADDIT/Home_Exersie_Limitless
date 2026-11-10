@@ -1,0 +1,7 @@
+PUT https://api.practicesoftwaretesting.com/products/00000000000000000000000000
+
+Request body:
+{}
+
+Response 404:
+{"message":"Requested item not found"}

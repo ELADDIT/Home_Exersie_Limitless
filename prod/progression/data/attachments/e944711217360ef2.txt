@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/reports/average-sales-per-month?year=2024
+
+Request body:
+
+
+Response 401:
+{"message":"Unauthorized"}

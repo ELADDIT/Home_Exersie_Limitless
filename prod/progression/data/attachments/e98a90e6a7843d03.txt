@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/categories
+
+Request body:
+{}
+
+Response 422:
+{"name":["The name field is required."],"slug":["The slug field is required."]}

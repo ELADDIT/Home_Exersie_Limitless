@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/payment/check
+
+Request body:
+{"payment_method": "bank-transfer", "payment_details": {}}
+
+Response 422:
+{"message":"The payment details.bank name field is required. (and 2 more errors)","errors":{"payment_details.bank_name":["The payment details.bank name field is required."],"payment_details.account_name":["The payment details.account name field is required."],"payment_details.account_number":["The payment details.account number field is required."]}}
