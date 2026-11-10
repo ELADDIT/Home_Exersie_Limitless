@@ -68,3 +68,23 @@ Guiding rule: **check business logic through the API** (fast, stable, no limit o
   - GitHub Actions, with separate sanity and progression workflows.
   - An Allure report on GitHub Pages, with history kept across runs for trend charts. Anyone can open it without logging in.
 - **Extensibility:** tests are grouped by feature (`tests/api/`, `tests/ui/`), with page objects for the UI and one shared API client. A test joins a set by adding a marker (`@pytest.mark.sanity` or `@pytest.mark.progression`).
+
+---
+
+## What changed
+
+*Added after building. The plan above is the original, committed before any test code.*
+
+1. **Boundary values got their own set, and validation moved up the risk ranking.** The original plan only had "invalid input" combinations. Exploring the API showed hard limits on almost every field (name lengths, password length, age 18–75, cart quantity 1–99). Testing each limit (on it, just inside, just outside) found two real bugs: someone turning 18 today can't register, and a cart line can exceed 99 by adding twice. **New ranking:** checkout → auth/access → money → *input validation at the edges* → catalog search. Wrong ages and quantities matter more than search order.
+2. **Access control grew from "can I read it?" to "can I change it?" and "can I fake who I am?".** The first matrix only checked reads by role. Adding write-side checks (changing another customer's order, catalog writes as a guest) and token checks (edited, unsigned, logged-out and replaced tokens) found the most serious bugs in the shop: any customer can read all users' personal data and change anyone's order status.
+3. **Test data had to respect the shared site's limits.** Three things only showed up while building:
+   - the API **locks an email after repeated failed logins**, so fixed "wrong" emails got locked and caused false failures;
+   - **orders consume real stock**: our order tests drained the first two products;
+   - the site's **database gets reset**, which changes product ids.
+
+   **Response:** every identifier is unique per run, orders pick a random in-stock product and a quantity of 1–3 capped by the real stock count, and no test relies on a hard-coded id.
+4. **The 10th UI test** was kept in reserve, then used for a **tour of the smaller features** (price slider, brand filter, compare, language, rentals, contact form, favorites). A broken small feature is still a broken feature. Soft checks (`pytest-check`) record every failing feature instead of stopping at the first one. The tour stays within the 10-test budget.
+5. **The invoice PDF came back into scope, and then went to "known issues".** It was out of scope in the original plan. During review we decided a customer's order confirmation PDF matters and should be checked in a UI test. Measuring it showed the PDF takes several minutes to be ready, more than the whole 5-minute pipeline, so it is documented as a known issue instead (see the README).
+6. **CI runs in the official Playwright container.** The first run spent ~2 of the 5 allowed minutes installing the browser. Playwright was pinned to the container's version (1.64.1).
+7. **A race condition in the shop's UI shaped how the tests wait.** Typing into the search while the first product list is still loading gets overwritten when that load finishes. The tests now wait for the catalog to be on screen first, as a person would. Likewise, each price-slider step waits for its own reload.
+8. **Kept out on purpose:** a script-injection test on the admin dashboard (token theft). The probe would be visible to everyone on the shared demo, so it belongs in a private environment.
