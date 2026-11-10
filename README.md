@@ -19,7 +19,7 @@ The landing page shows the latest status of every test set and environment, a re
 | **Sanity** | "Is the store fundamentally working?" Browse, login, cart, checkout, order totals | Every push | 4 | 3 | ~12 s |
 | **Progression** | Features in depth: access control, validation edges, catalog, cart, orders, payments, tokens, a UI tour of the smaller features | Pull requests, pushes to `main`, nightly 02:00 UTC, on demand | 137 | 7 | ~50 s |
 
-That is 10 UI tests in total (the brief allows 5–10). Some progression tests are marked **expected to fail**: each one is a confirmed bug in the app (see [Bugs found](#bugs-found-while-building)). They turn red automatically once the bug is fixed.
+That is 10 UI tests in total (the brief allows 5–10). On GitHub's runners the UI tests are currently skipped as a known issue (see [Notes](#notes-and-assumptions)). Some progression tests are marked **expected to fail**: each one is a confirmed bug in the app (see [Bugs found](#bugs-found-while-building)). They turn red automatically once the bug is fixed.
 
 ## Run it locally
 
@@ -115,7 +115,7 @@ This will be updated with the final total at submission.
 
 ## Notes and assumptions
 
-- **Browser tests are blocked on GitHub's runners.** Since 2026-11-10 (first seen at about 14:21 Israel time), the shop's Cloudflare bot check shows "Performing security verification" to the browser on GitHub-hosted runners. It doesn't on a normal connection. I tried full Chromium on CI and it didn't help. I deliberately didn't try to disguise the browser: that would mean defeating the site owner's security control. A preflight check now detects the block and reports the UI tests as **broken: blocked by the site's bot protection**, a separate category from product failures. The API tests are unaffected. The UI tests pass locally, and the evidence (final screens of all 10 tests) is in [docs/ui-evidence/](docs/ui-evidence/). With a self-hosted runner or an allow-listed test environment, they'd run in CI unchanged.
+- **Browser tests are blocked on GitHub's runners.** Since 2026-11-10 (first seen at about 14:21 Israel time), the shop's Cloudflare bot check shows "Performing security verification" to the browser on GitHub-hosted runners. It doesn't on a normal connection. I tried full Chromium on CI and it didn't help. I deliberately didn't try to disguise the browser: that would mean defeating the site owner's security control. A preflight check now detects the block and **skips the UI tests as a known issue**, with the reason spelled out. They show in **blue** as "Known issues" on the dashboard and under their own category in the report. So on GitHub a green run means *the API checks pass; the UI was not run there*. The API tests are unaffected. The UI tests pass locally, and the evidence (final screens of all 10 tests) is in [docs/ui-evidence/](docs/ui-evidence/). With a self-hosted runner or an allow-listed test environment, they'd run in CI unchanged.
 
 - The shared site's database was reset between about **12:56 and 13:20 Israel time** (10:56–11:20 UTC) on 2026-11-10: invoice numbers restarted and product ids changed. No outage was seen.
 - I assumed using the public demo admin account for **read-only** checks is acceptable, since the brief allows using anything the application offers.
