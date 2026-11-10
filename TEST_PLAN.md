@@ -98,3 +98,14 @@ Guiding rule: **check business logic through the API** (fast, stable, no limit o
     - billing postal code is optional although the spec requires it.
 11. **The browser tests are blocked on GitHub's runners** by the site's Cloudflare bot check. They pass from a normal connection. Trying full Chromium on CI didn't help. Instead of disguising the browser, which would mean defeating the site's own security control, the suite reports this case as "blocked by the site's bot protection", separate from product failures. The browser tests are verified locally, with screenshots.
 12. **The bot-protection block became a "known issue"** instead of a failure: when the site blocks the browser, the UI tests are skipped with the reason spelled out, and the dashboard shows them in blue next to the known app bugs. A red CI run should mean the store is broken, and this isn't. The cost is that a green run on GitHub doesn't cover the UI, which the dashboard and README state explicitly.
+13. **Second review of the UI journeys, including an outside proposal** (Gemini). I adopted three ideas, each folded into an existing test so we stay at 10:
+    - checkout then checks that the order appears in *My account → Invoices*;
+    - the catalog test combines category, brand and price filters;
+    - the contact message is sent while logged in and checked in *My account → Messages*.
+
+    I rejected:
+    - tests that reuse another test's customer or order: they break parallel runs and test independence;
+    - merging both checkouts into one: sanity should stay the plain happy path;
+    - "eco-discount" and "CO₂ sort" checks: the behaviour wasn't verified, so the tests would be guesses.
+
+    The access-control journeys also grew: the customer is refused on every admin page; the admin opens each one, then finds a fresh customer's order and account through the admin search. One step that couldn't be done through the screen (the keyboard on the Reports submenu) is reported as a finding.

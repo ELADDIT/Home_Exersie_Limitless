@@ -16,8 +16,8 @@ The landing page shows the latest status of every test set and environment, a re
 
 | Set | Purpose | When it runs | API tests | UI tests | Runtime (4 workers) |
 |---|---|---|---|---|---|
-| **Sanity** | "Is the store fundamentally working?" Browse, login, cart, checkout, order totals | Every push | 4 | 3 | ~12 s |
-| **Progression** | Features in depth: access control, validation edges, catalog, cart, orders, payments, tokens, a UI tour of the smaller features | Pull requests, pushes to `main`, nightly 02:00 UTC, on demand | 137 | 7 | ~50 s |
+| **Sanity** | "Is the store fundamentally working?" Browse, login, cart, checkout, order totals, invoice privacy | Every push | 5 | 3 | ~15 s |
+| **Progression** | Features in depth: access control, validation edges, catalog, cart, orders, payments, tokens, a UI tour of the smaller features | Pull requests, pushes to `main`, nightly 02:00 UTC, on demand | 168 | 7 | ~75 s |
 
 That is 10 UI tests in total (the brief allows 5–10). On GitHub's runners the UI tests are currently skipped as a known issue (see [Notes](#notes-and-assumptions)). Some progression tests are marked **expected to fail**: each one is a confirmed bug in the app (see [Bugs found](#bugs-found-while-building)). They turn red automatically once the bug is fixed.
 
@@ -87,12 +87,15 @@ All were confirmed by hand on 2026-11-10 and are covered by expected-to-fail tes
 | Known issue (no test) | **Invoice PDF is very slow:** after an order, "Download PDF" stays disabled for several minutes (more than 3 minutes in our timing). A test would have to wait longer than the whole 5-minute pipeline allows. We'd solve this differently: a separate scheduled check with a long timeout, or ask the team to expose the PDF job status so the test can wait on it efficiently. |
 | Observation | The login token is stored in the browser's `localStorage`, so any script injected into the page could read it. |
 | Observation | Invalid input often gets `404` instead of `422`; deleting someone else's favorite returns `204` although nothing is deleted. |
+| Medium | **Admin "Reports" submenu can't be used with the keyboard:** clicking "Reports" or pressing Enter/→ on it closes the whole menu, so Statistics and the sales reports are reachable only by hovering with a mouse (accessibility). The UI test reaches it by hovering, as a mouse user does. |
+| Medium | **Search can't find products whose name contains "with"**: searching the exact name "Claw Hammer with Shock Reduction Grip" returns nothing, while "Claw Hammer" works. |
 | Observation | After a **credit-card** order, the cart badge still shows the items (after cash on delivery it's empty). This is the UI side of "same cart can be ordered twice". |
 | Observation | A customer who opens `/admin/dashboard` lands on the login page with an empty header (looks like a silent logout). The compare selection persists across pages. |
 
 ## Directions I didn't finish
 
 - **Run the UI tests in CI:** needs a runner the site's bot protection accepts (self-hosted) or an allow-listed test environment. Today they're verified locally (see above).
+- **Profile page:** viewing and editing your own details (name, address, phone) through the screen and the API, including that the change sticks and that another customer can't edit it. The API side of "can't edit someone else's profile" is covered; the customer's own edit path is not.
 - **Script-injection test (token theft):** place an order whose billing street contains a harmless script, then check that the admin dashboard shows it as plain text. This is the realistic way a stolen admin token would happen. It was **left out on purpose**: on the shared demo site everyone would see that "street". It belongs in a private test environment.
 - **Invoice PDF check:** see the known issue above.
 - **Eco-friendly filter, sorting by name, pagination in the UI** aren't covered in the browser. Sorting and pagination are covered in the API.
@@ -117,6 +120,7 @@ This will be updated with the final total at submission.
 
 - **Browser tests are blocked on GitHub's runners.** Since 2026-11-10 (first seen at about 14:21 Israel time), the shop's Cloudflare bot check shows "Performing security verification" to the browser on GitHub-hosted runners. It doesn't on a normal connection. I tried full Chromium on CI and it didn't help. I deliberately didn't try to disguise the browser: that would mean defeating the site owner's security control. A preflight check now detects the block and **skips the UI tests as a known issue**, with the reason spelled out. They show in **blue** as "Known issues" on the dashboard and under their own category in the report. So on GitHub a green run means *the API checks pass; the UI was not run there*. The API tests are unaffected. The UI tests pass locally, and the evidence (final screens of all 10 tests) is in [docs/ui-evidence/](docs/ui-evidence/). With a self-hosted runner or an allow-listed test environment, they'd run in CI unchanged.
 
-- The shared site's database was reset between about **12:56 and 13:20 Israel time** (10:56–11:20 UTC) on 2026-11-10: invoice numbers restarted and product ids changed. No outage was seen.
+- **Outage:** on 2026-11-10 at about 15:10 Israel time the shared site was down or very slow (web page timing out after 20 s, API returning HTTP 500). Earlier the same day, a burst of API timeouts during development was what led to the "shared site slow or unreachable" report category.
+- The shared site's database was reset between about **12:56 and 13:20 Israel time** (10:56–11:20 UTC) on 2026-11-10, and again shortly before 15:00: invoice numbers restarted and product ids changed.
 - I assumed using the public demo admin account for **read-only** checks is acceptable, since the brief allows using anything the application offers.
 - The brief PDF itself is not in the repository.
