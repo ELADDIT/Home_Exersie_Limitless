@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/favorites/01m72t77tf1zz0t4yfb0h5hv7k
+
+Request body:
+
+
+Response 200:
+{"id":"01m72t77tf1zz0t4yfb0h5hv7k","user_id":"01m72t76ame4gykcc7v57s9agb","product_id":"01M72RQA5G2TKR8E53W581B77N"}

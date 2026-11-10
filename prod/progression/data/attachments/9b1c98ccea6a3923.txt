@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/login
+
+Request body:
+{"email": "qa.1901248099d0446f9bb02746e5866cac@example.com", "password": "%0Ig6tvgEs_BKux"}
+
+Response 423:
+{"error":"Account locked, too many failed attempts. Please contact the administrator."}

@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/change-password
-
-Request body:
-{"current_password": "fsX*LwGw*C*7ZB", "new_password": "Ab1!", "new_password_confirmation": "Ab1!"}
-
-Response 422:
-{"message":"The new password field must be at least 8 characters.","errors":{"new_password":["The new password field must be at least 8 characters."]}}

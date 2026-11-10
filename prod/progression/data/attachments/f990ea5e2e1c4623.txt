@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/register
-
-Request body:
-{"first_name": "Ellen", "last_name": "Powell", "email": "qa.0248c8e62d504a0da04a3cae31f8f955@example.com", "password": "2@&RNsC$tK34Up", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "77777777777777777777777777777777777777777777777777777777777777777777777", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
-
-Response 422:
-{"address.street":["The address.street field must not be greater than 70 characters."]}

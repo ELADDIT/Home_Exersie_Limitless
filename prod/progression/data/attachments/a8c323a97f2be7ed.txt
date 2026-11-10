@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/carts/01m72t6zb3e4katna1g90w1tky
+
+Request body:
+{"product_id": "01M72RQA5QR9XTV6RWFTCM4XSS", "quantity": 3}
+
+Response 200:
+{"result":"item added or updated"}

@@ -1,1 +1,1 @@
-{"reportName":"Toolshop progression (prod)","testRuns":[],"statistic":{"failed":0,"broken":0,"skipped":31,"passed":143,"unknown":0,"total":174},"time":{"start":1794314480267,"stop":1794314571340,"duration":91073,"minDuration":0,"maxDuration":3065,"sumDuration":156433}}
+{"reportName":"Toolshop progression (prod)","testRuns":[],"statistic":{"failed":0,"broken":0,"skipped":32,"passed":143,"unknown":0,"total":175},"time":{"start":1794317172964,"stop":1794317258748,"duration":85784,"minDuration":0,"maxDuration":3136,"sumDuration":137834}}
