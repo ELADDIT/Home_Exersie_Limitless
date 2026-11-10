@@ -1,0 +1,25 @@
+name: sanity
+
+# Fast critical-path check on every push (any branch).
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: Target environment
+        type: choice
+        options: [prod, with-bugs]
+        default: prod
+
+# A newer push to the same branch makes an older sanity run irrelevant.
+concurrency:
+  group: sanity-${{ github.ref }}-${{ inputs.env || 'prod' }}
+  cancel-in-progress: true
+
+jobs:
+  sanity:
+    uses: ./.github/workflows/_run-suite.yml
+    with:
+      suite: sanity
+      env: ${{ inputs.env || 'prod' }}
+    secrets: inherit

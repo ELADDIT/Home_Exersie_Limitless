@@ -1,0 +1,144 @@
+# Reusable workflow: runs one test set against one environment, then (on main only)
+# publishes an Allure report with run history to GitHub Pages at /<env>/<suite>/.
+name: run-suite
+
+on:
+  workflow_call:
+    inputs:
+      suite:
+        description: "pytest marker to run: sanity | progression"
+        required: true
+        type: string
+      env:
+        description: "Target environment: prod | with-bugs"
+        required: false
+        type: string
+        default: prod
+
+env:
+  ALLURE_VERSION: 2.46.1
+
+jobs:
+  test:
+    name: ${{ inputs.suite }} (${{ inputs.env }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 5 # brief: the pipeline must finish within 5 minutes
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Cache Playwright browser
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+
+      - name: Run ${{ inputs.suite }} tests (4 workers)
+        env:
+          TOOLSHOP_ENV: ${{ inputs.env }}
+          TOOLSHOP_ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          TOOLSHOP_ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: >
+          pytest -m ${{ inputs.suite }} -n 4
+          --alluredir allure-results
+          --junitxml junit.xml
+          --tracing retain-on-failure --output test-results
+
+      - name: Upload raw results and Playwright traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-${{ inputs.env }}-${{ inputs.suite }}
+          path: |
+            allure-results
+            test-results
+            junit.xml
+          retention-days: 14
+          if-no-files-found: ignore
+
+  publish:
+    name: publish dashboard
+    needs: test
+    # Publish even when tests fail (that's when the report matters most), but only from main,
+    # so PR branches never overwrite the team's dashboard history.
+    if: always() && needs.test.result != 'cancelled' && needs.test.result != 'skipped' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    # Several runs can finish at the same time; serialise writes to the gh-pages branch.
+    concurrency:
+      group: gh-pages-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: results-${{ inputs.env }}-${{ inputs.suite }}
+          path: results
+
+      - name: Fetch previous report history
+        run: |
+          mkdir -p results/allure-results
+          if git fetch --depth 1 origin gh-pages; then
+            git worktree add --detach site FETCH_HEAD
+            cp -r "site/${{ inputs.env }}/${{ inputs.suite }}/history" results/allure-results/ 2>/dev/null || echo "no history yet"
+          else
+            mkdir site
+          fi
+
+      - name: Add run metadata to the report
+        env:
+          REPORT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${{ inputs.env }}/${{ inputs.suite }}/
+        run: |
+          cat > results/allure-results/executor.json <<EOF
+          {"name": "GitHub Actions", "type": "github", "buildOrder": ${{ github.run_number }},
+           "buildName": "${{ github.workflow }} #${{ github.run_number }} (${{ github.event_name }})",
+           "buildUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+           "reportUrl": "$REPORT_URL", "reportName": "Toolshop ${{ inputs.suite }} (${{ inputs.env }})"}
+          EOF
+          printf 'Environment=%s\nSuite=%s\nCommit=%s\nTrigger=%s\n' \
+            "${{ inputs.env }}" "${{ inputs.suite }}" "${{ github.sha }}" "${{ github.event_name }}" \
+            > results/allure-results/environment.properties
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Generate Allure report
+        run: npx --yes allure-commandline@${ALLURE_VERSION} generate results/allure-results --clean -o report
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: report
+          destination_dir: ${{ inputs.env }}/${{ inputs.suite }}
+          keep_files: true
+          commit_message: "Dashboard: ${{ inputs.env }}/${{ inputs.suite }} run ${{ github.run_number }}"
+
+      - name: Publish dashboard index page
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: .github/pages
+          keep_files: true
+          commit_message: "Dashboard index"
+
+      - name: Link in job summary
+        run: |
+          echo "### Dashboard: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${{ inputs.env }}/${{ inputs.suite }}/" >> "$GITHUB_STEP_SUMMARY"
