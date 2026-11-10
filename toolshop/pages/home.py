@@ -11,6 +11,10 @@ class HomePage:
         self.sort_select = page.get_by_test_id("sort")
         self.product_names = page.get_by_test_id("product-name")
         self.product_prices = page.get_by_test_id("product-price")
+        self.max_price_slider = page.get_by_role("slider").nth(1)
+        self.compare_buttons = page.get_by_test_id("compare-btn")
+        self.comparison_bar = page.get_by_test_id("comparison-bar")
+        self.compare_now_link = page.get_by_test_id("compare-link")
 
     @staticmethod
     def _is_product_query(response) -> bool:
@@ -42,3 +46,20 @@ class HomePage:
 
     def displayed_prices(self) -> list[float]:
         return [float(t.lstrip("$")) for t in self.product_prices.all_inner_texts()]
+
+    def lower_max_price(self, steps: int) -> int:
+        """Move the price slider's upper handle down with the keyboard (one PageDown per step).
+        Every step reloads the list, so wait for each reload; otherwise an older response can win."""
+        self.max_price_slider.focus()
+        for _ in range(steps):
+            with self.page.expect_response(self._is_product_query):
+                self.max_price_slider.press("PageDown")
+        return int(self.max_price_slider.get_attribute("aria-valuenow"))
+
+    def filter_by_brand(self, brand: str) -> None:
+        with self.page.expect_response(self._is_product_query):
+            self.page.get_by_label(brand, exact=True).check()
+
+    def select_for_comparison(self, *indexes: int) -> None:
+        for i in indexes:
+            self.compare_buttons.nth(i).click()

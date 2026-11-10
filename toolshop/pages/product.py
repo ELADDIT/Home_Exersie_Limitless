@@ -9,9 +9,13 @@ class ProductPage:
         self.quantity = page.get_by_test_id("quantity")
         self.increase_button = page.get_by_test_id("increase-quantity")
         self.add_to_cart_button = page.get_by_test_id("add-to-cart")
+        self.add_to_favorites_button = page.get_by_test_id("add-to-favorites")
 
     def increase_quantity(self) -> None:
         self.increase_button.click()
 
     def add_to_cart(self) -> None:
         self.add_to_cart_button.click()
+
+    def add_to_favorites(self) -> None:
+        self.add_to_favorites_button.click()

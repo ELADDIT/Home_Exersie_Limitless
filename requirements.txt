@@ -8,3 +8,4 @@ requests==2.34.2
 pydantic==2.14.3
 pydantic-settings==2.16.2
 Faker==40.52.0
+pytest-check==3.0.3
