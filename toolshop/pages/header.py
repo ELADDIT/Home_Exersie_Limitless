@@ -1,8 +1,14 @@
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
+
+from .layout import expect_page_elements
 
 
 class HeaderComponent:
     """Top navigation bar, present on every page."""
+
+    EXPECTED = [("Home link", "nav-home"), ("Categories menu", "nav-categories"), ("Contact link", "nav-contact"),
+                ("Language select", "language-select")]
+    CART_FILLED = [("Cart link", "nav-cart"), ("Cart badge", "cart-quantity")]  # only after something was added
 
     def __init__(self, page: Page):
         self.page = page
@@ -18,6 +24,15 @@ class HeaderComponent:
         self.categories_menu = page.get_by_test_id("nav-categories")
         self.rentals_link = page.get_by_test_id("nav-rentals")
         self.language_select = page.get_by_test_id("language-select")
+
+    def expected(self, cart_filled: bool = False) -> list[tuple[str, str]]:
+        """Header elements for the current state: "Sign in" when logged out, the user menu when logged in."""
+        expect(self.sign_in_link.or_(self.user_menu)).to_be_visible()  # wait until the header knows who is logged in
+        account = ("User menu", "nav-menu") if self.user_menu.is_visible() else ("Sign in link", "nav-sign-in")
+        return [*self.EXPECTED, account, *(self.CART_FILLED if cart_filled else [])]
+
+    def expect_loaded(self, cart_filled: bool = False) -> None:
+        expect_page_elements(self.page, "Header", self.expected(cart_filled))
 
     def open_cart(self) -> None:
         self.cart_link.click()

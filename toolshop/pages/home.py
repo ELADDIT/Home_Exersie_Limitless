@@ -1,8 +1,15 @@
 from playwright.sync_api import Page, expect
 
+from .header import HeaderComponent
+from .layout import expect_page_elements
+
 
 class HomePage:
     """Catalog: search, category filter, sorting and product cards."""
+
+    EXPECTED = [("Sort select", "sort"), ("Search field", "search-query"),
+                ("Search button", "search-submit"), ("Product card name", "product-name"),
+                ("Product card price", "product-price"), ("Compare button on a card", "compare-btn")]
 
     def __init__(self, page: Page):
         self.page = page
@@ -26,6 +33,9 @@ class HomePage:
         Without this, a search fired during the initial load gets overwritten when that load finishes."""
         self.page.goto("/")
         expect(self.product_names.first).to_be_visible()
+
+    def expect_loaded(self, cart_filled: bool = False) -> None:
+        expect_page_elements(self.page, "Home page", [*HeaderComponent(self.page).expected(cart_filled), *self.EXPECTED])
 
     def search(self, text: str) -> None:
         with self.page.expect_response(lambda r: "/products/search" in r.url):

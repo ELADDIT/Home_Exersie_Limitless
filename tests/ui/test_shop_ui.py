@@ -15,16 +15,19 @@ def money(text: str) -> float:
     return float(re.sub(r"[^0-9.]", "", text))
 
 
-def add_product_from_home(page: Page, name: str, quantity: int = 1, expected_badge: str | None = None) -> None:
+def add_product_from_home(page: Page, name: str, quantity: int = 1, expected_badge: str | None = None,
+                          cart_filled: bool = False) -> None:
     """Open a product from the catalog, set the quantity with the + button, add it to the cart."""
     HomePage(page).open_product(name)
     product = ProductPage(page)
+    product.expect_loaded(cart_filled=cart_filled)
     for _ in range(quantity - 1):
         product.increase_quantity()
     expect(product.quantity).to_have_value(str(quantity))
     product.add_to_cart()
     expect(HeaderComponent(page).cart_badge).to_have_text(expected_badge or str(quantity))
     HeaderComponent(page).home_link.click()
+    HomePage(page).expect_loaded(cart_filled=True)
 
 
 # ---------------------------------------------------------------- SANITY
@@ -33,11 +36,13 @@ def test_guest_searches_and_adds_product_to_cart(page: Page):
     home, product, header, cart = HomePage(page), ProductPage(page), HeaderComponent(page), CheckoutPage(page)
     with allure.step("Search for a product by name"):
         home.open()
+        home.expect_loaded()
         home.search("Sledgehammer")
         expect(home.product_names).to_have_text(["Sledgehammer"])
     with allure.step("Open the product page and add 2 pieces to the cart"):
         home.open_product("Sledgehammer")
         expect(product.name).to_have_text("Sledgehammer")
+        product.expect_loaded()
         unit_price = money(product.unit_price.inner_text())
         product.increase_quantity()
         expect(product.quantity).to_have_value("2")
@@ -46,6 +51,7 @@ def test_guest_searches_and_adds_product_to_cart(page: Page):
         expect(header.cart_badge).to_have_text("2")
     with allure.step("Cart page shows the right product, quantity and line total"):
         header.open_cart()
+        cart.expect_cart_loaded()
         expect(cart.lines).to_have_count(1)
         expect(cart.line("Sledgehammer")).to_be_visible()
         expect(cart.line("Sledgehammer").get_by_test_id("product-quantity")).to_have_value("2")
@@ -57,8 +63,11 @@ def test_guest_searches_and_adds_product_to_cart(page: Page):
 def test_login_wrong_password_then_correct(page: Page, customer):
     header, login, account = HeaderComponent(page), LoginPage(page), AccountPage(page)
     with allure.step("Open the sign-in page and enter a wrong password"):
-        HomePage(page).open()
+        home = HomePage(page)
+        home.open()
+        home.expect_loaded()
         header.open_sign_in()
+        login.expect_loaded()
         login.login(customer.email, customer.password + "x")
         expect(login.error).to_have_text("Invalid email or password")
     with allure.step("Enter the correct password"):
@@ -67,6 +76,7 @@ def test_login_wrong_password_then_correct(page: Page, customer):
     with allure.step("Lands on the account page as the customer"):
         expect(page).to_have_url(re.compile(r"/account$"))
         expect(account.title).to_have_text("My account")
+        account.expect_loaded()
         expect(header.user_menu).to_have_text(f"{customer.first_name} {customer.last_name}")
 
 
@@ -75,26 +85,34 @@ def test_checkout_cash_on_delivery(page: Page, customer, pick_purchases):
     [(item, quantity)] = pick_purchases(1)  # random in-stock product, 1-3 units (orders use shared stock)
     header, cart = HeaderComponent(page), CheckoutPage(page)
     with allure.step("Add the picked product and quantity to the cart"):
-        HomePage(page).open()
+        home = HomePage(page)
+        home.open()
+        home.expect_loaded()
         add_product_from_home(page, item["name"], quantity)
     with allure.step("Cart -> sign in step: log in"):
         header.open_cart()
+        cart.expect_cart_loaded()
         cart.proceed_to_sign_in.click()
+        cart.expect_sign_in_loaded()
         cart.sign_in(customer.email, customer.password)
         expect(page.get_by_text(f"Hello {customer.first_name} {customer.last_name}, you are already logged in")).to_be_visible()
+        cart.expect_signed_in_loaded()
         cart.proceed_to_address.click()
     with allure.step("Billing address (NL, 1012AB, 8)"):
+        cart.expect_address_loaded()
         cart.fill_address("NL", "1012AB", "8")
         expect(cart.city).to_have_value("Steensel")
         expect(cart.state).to_have_value("Noord-Holland")
         cart.proceed_to_payment.click()
     with allure.step("Pay on delivery and confirm"):
+        cart.expect_payment_loaded()
         cart.choose_payment("cash-on-delivery")
         cart.finish_button.click()
         expect(cart.payment_success).to_be_visible()
         cart.finish_button.click()
     with allure.step("Order confirmation with invoice number"):
         expect(cart.order_confirmation).to_contain_text("Your invoice number is INV-")
+        cart.expect_confirmation_loaded()
 
 
 # ---------------------------------------------------------------- PROGRESSION
@@ -104,6 +122,7 @@ def test_registration_invalid_then_valid(page: Page):
     email, password = unique_email(), strong_password()
     with allure.step("Submit the empty form: every required field shows an error"):
         reg.open()
+        reg.expect_loaded()
         reg.submit()
         for name in ("first-name", "last-name", "dob", "country", "postal_code", "house_number",
                      "street", "city", "state", "phone", "email", "password"):
@@ -123,6 +142,7 @@ def test_registration_invalid_then_valid(page: Page):
     with allure.step("Redirected to the login page"):
         expect(page).to_have_url(re.compile(r"/auth/login$"))
         expect(LoginPage(page).submit_button).to_be_visible()
+        LoginPage(page).expect_loaded()
 
 
 @pytest.mark.progression
@@ -130,17 +150,25 @@ def test_checkout_credit_card_invalid_then_valid(page: Page, customer, pick_purc
     [(item, quantity)] = pick_purchases(1)  # random in-stock product, 1-3 units (orders use shared stock)
     header, cart = HeaderComponent(page), CheckoutPage(page)
     with allure.step("Add a product, sign in at checkout, enter the billing address"):
-        HomePage(page).open()
+        home = HomePage(page)
+        home.open()
+        home.expect_loaded()
         add_product_from_home(page, item["name"], quantity)
         header.open_cart()
+        cart.expect_cart_loaded()
         cart.proceed_to_sign_in.click()
+        cart.expect_sign_in_loaded()
         cart.sign_in(customer.email, customer.password)
+        cart.expect_signed_in_loaded()
         cart.proceed_to_address.click()
+        cart.expect_address_loaded()
         cart.fill_address("NL", "1012AB", "8")
         expect(cart.city).to_have_value("Steensel")
         cart.proceed_to_payment.click()
     with allure.step("Credit card with bad number, expiry and CVV: errors shown, cannot confirm"):
+        cart.expect_payment_loaded()
         cart.choose_payment("credit-card")
+        cart.expect_payment_loaded(card=True)
         cart.fill_card("1234", "13/20", "1", "Jane Tester")
         expect(cart.card_error("Invalid card number format")).to_be_visible()
         expect(cart.card_error("Invalid date format")).to_be_visible()
@@ -155,6 +183,7 @@ def test_checkout_credit_card_invalid_then_valid(page: Page, customer, pick_purc
         cart.finish_button.click()
     with allure.step("Order confirmation"):
         expect(cart.order_confirmation).to_contain_text("Your invoice number is INV-")
+        cart.expect_confirmation_loaded()
 
 
 @pytest.mark.progression
@@ -162,10 +191,13 @@ def test_cart_quantity_change_and_remove(page: Page):
     header, cart = HeaderComponent(page), CheckoutPage(page)
     first, second = "Slip Joint Pliers", "Thor Hammer"
     with allure.step("Add two different products"):
-        HomePage(page).open()
+        home = HomePage(page)
+        home.open()
+        home.expect_loaded()
         add_product_from_home(page, first, 1, expected_badge="1")
-        add_product_from_home(page, second, 1, expected_badge="2")
+        add_product_from_home(page, second, 1, expected_badge="2", cart_filled=True)
         header.open_cart()
+        cart.expect_cart_loaded()
         expect(cart.lines).to_have_count(2)
         price1, price2 = money(cart.unit_price(first).inner_text()), money(cart.unit_price(second).inner_text())
         expect(cart.cart_total).to_have_text(f"${price1 + price2:.2f}")
@@ -186,6 +218,7 @@ def test_catalog_filter_by_category_and_sort_by_price(page: Page):
     home = HomePage(page)
     with allure.step("Filter by the Hammer category"):
         home.open()
+        home.expect_loaded()
         home.filter_by_category("Hammer")
         expect(home.product_names.first).to_contain_text("ammer")
         expect(home.product_names.filter(has_not_text=re.compile("hammer", re.I))).to_have_count(0)
@@ -209,11 +242,17 @@ def test_access_control(page: Page, request, role):
     else:
         email, password = request.getfixturevalue("admin_credentials")
     with allure.step(f"Log in as {role} through the sign-in screen"):
-        HomePage(page).open()
+        home = HomePage(page)
+        home.open()
+        home.expect_loaded()
         header.open_sign_in()
+        login.expect_loaded()
         login.login(email, password)
         expect(header.user_menu).to_be_visible()
     with allure.step("Check which menu entries this role sees"):
+        if role == "customer":
+            expect(page).to_have_url(re.compile(r"/account$"))
+            AccountPage(page).expect_loaded()
         header.open_user_menu()
         if role == "customer":
             expect(header.my_account_entry).to_be_visible()
@@ -229,3 +268,4 @@ def test_access_control(page: Page, request, role):
             header.admin_dashboard_entry.click()
             expect(page).to_have_url(re.compile(r"/admin/dashboard$"))
             expect(AdminDashboardPage(page).title).to_have_text("Sales over the years")
+            AdminDashboardPage(page).expect_loaded()

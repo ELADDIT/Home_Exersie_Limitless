@@ -1,8 +1,16 @@
 from playwright.sync_api import Page
 
+from .header import HeaderComponent
+from .layout import expect_page_elements
+
 
 class RegisterPage:
     FIELDS = ("first-name", "last-name", "dob", "phone", "email", "password")
+
+    EXPECTED = [("First name field", "first-name"), ("Last name field", "last-name"), ("Date of birth field", "dob"),
+                ("Country select", "country"), ("Postal code field", "postal_code"), ("House number field", "house_number"),
+                ("Street field", "street"), ("City field", "city"), ("State field", "state"), ("Phone field", "phone"),
+                ("Email field", "email"), ("Password field", "password"), ("Register button", "register-submit")]
 
     def __init__(self, page: Page):
         self.page = page
@@ -13,6 +21,9 @@ class RegisterPage:
         self.street = page.get_by_test_id("street")
         self.city = page.get_by_test_id("city")
         self.state = page.get_by_test_id("state")
+
+    def expect_loaded(self) -> None:
+        expect_page_elements(self.page, "Register page", [*HeaderComponent(self.page).expected(), *self.EXPECTED])
 
     def field(self, name: str):
         return self.page.get_by_test_id(name)

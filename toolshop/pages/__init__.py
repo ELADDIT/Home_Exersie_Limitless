@@ -9,6 +9,7 @@ from .home import HomePage
 from .login import LoginPage
 from .product import ProductPage
 from .register import RegisterPage
+from .rentals import RentalsPage
 
 __all__ = ["AccountPage", "AdminDashboardPage", "CheckoutPage", "ComparisonPage", "ContactPage", "FavoritesPage", "HeaderComponent", "HomePage",
-           "LoginPage", "ProductPage", "RegisterPage"]
+           "LoginPage", "ProductPage", "RegisterPage", "RentalsPage"]
