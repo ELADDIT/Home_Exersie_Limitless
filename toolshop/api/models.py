@@ -35,11 +35,20 @@ class ProductPage(Page):
     data: list[Product]
 
 
+class CartProduct(_Base):
+    """Product as nested in a cart line (the API omits category and brand there)."""
+    id: str
+    name: str
+    price: float
+    in_stock: bool | None = None
+    is_rental: bool | None = None
+
+
 class CartItem(_Base):
     id: str
     quantity: int
     product_id: str
-    product: Product
+    product: CartProduct
 
 
 class Cart(_Base):
