@@ -1,2 +1,11 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","679","test_product_catalog_lists_products","tests.api","2026-11-10","passed","2026-11-10","","test_products","",""
+"Orders: the invoice total equals the sum of the cart lines, the order appears in the customer's own list, and nobody else can read it.","1060","Order total equals sum of lines","tests.api","2026-11-10","passed","2026-11-10","","test_orders","",""
+"Catalog sanity: the store lists products with valid data.","462","Product catalog lists products","tests.api","2026-11-10","passed","2026-11-10","","test_products","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","2372","Guest can create cart and add product","tests.api","2026-11-10","passed","2026-11-10","","test_cart","",""
+"Browser tests. Every step under test goes through the screen; the only API use is the
+`customer` fixture, which creates a fresh account as a precondition.","6276","Checkout cash on delivery [chromium]","tests.ui","2026-11-10","failed","2026-11-10","","test_shop_ui","",""
+"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","1492","Fresh customer can log in and use the token","tests.api","2026-11-10","passed","2026-11-10","","test_auth","",""
+"Browser tests. Every step under test goes through the screen; the only API use is the
+`customer` fixture, which creates a fresh account as a precondition.","5647","Login wrong password then correct [chromium]","tests.ui","2026-11-10","failed","2026-11-10","","test_shop_ui","",""
+"Browser tests. Every step under test goes through the screen; the only API use is the
+`customer` fixture, which creates a fresh account as a precondition.","5469","Guest searches and adds product to cart [chromium]","tests.ui","2026-11-10","failed","2026-11-10","","test_shop_ui","",""
