@@ -2916,3 +2916,64 @@ Two clean runs: 10 passed each time, about 22 s. Now the screenshots of the new 
 I'll also add invoice privacy to the sanity row's description, then commit in logical steps and refresh the logs:
 
 > tool: `Bash` - Commit in logical steps and refresh logs
+
+### Claude (2026-11-10 13:24:34 UTC)
+
+Everything you approved is done, reviewed and committed locally: **4 commits, not pushed yet.** We're at about 3h10m (12:15 → 15:24).
+
+**What changed:**
+- **Sanity** now includes an access-control check ("customer B can't read A's invoice"), so it's 8 tests.
+- **No hard-coded product names:** the UI tests pick products from the live catalog, matching names exactly.
+- **Access control both ways:**
+  - the customer is refused on all 9 admin pages;
+  - the admin opens each of the 9 from the menu;
+  - then, using the admin search, the admin finds a fresh customer's **order** (by invoice number and total) and **account** (by email and name).
+- **Gemini's three good ideas:**
+  - after each checkout, the order appears in **My account → Invoices** with the right total;
+  - the catalog test **combines** category, brand and price, and must match the API's answer exactly;
+  - the contact message is sent while logged in and appears in **My messages**.
+- **Two new findings:**
+  - Search can't find products whose name contains "**with**".
+  - The admin **Reports** submenu can't be used with the keyboard.
+- **Two flaky spots caught and fixed before they reached you:**
+  - a random product pick that hit the search bug;
+  - the admin search racing the page's first load.
+- **README:** the outage at about 15:10, a second database reset, and the profile page under "would test".
+
+**Verified:**
+- UI: 10/10 passed twice in a row with full logs saved. I checked screenshots of every new step (invoices, filters, messages).
+- Sanity: 8 passed.
+- Progression: 150 passed, plus 25 known bugs.
+- Neither log contains credentials.
+
+**Next:**
+1. Push these 4 commits and confirm the CI runs and the dashboard.
+2. Then the very last commit: the final time spent and the refreshed conversation log, so CI runs on the final commit.
+
+**OK to push?**
+
+### User (2026-11-10 13:25:23 UTC)
+
+ok
+
+> tool: `Bash` - Push to main and list CI runs
+
+> tool: `Bash` - Wait for CI runs and summarize
+
+### Claude (2026-11-10 13:25:50 UTC)
+
+Pushed. Sanity and progression are now running on GitHub, and I'll report the result when they finish. After that, all that's left is the last small commit: the final time spent in the README and the refreshed conversation log. I'll ask you before pushing it.
+
+### User (2026-11-10 13:28:20 UTC)
+
+<task-notification>
+<task-id>by7ed18mc</task-id>
+<tool-use-id>toolu_01KnttLCcDeFRtdBQLM4vYoA</tool-use-id>
+<output-file>/tmp/claude-1000/-home-eladd-Desktop-home-assigmnet/805938e2-cb1d-41dd-9518-d3c93af86d2a/tasks/by7ed18mc.output</output-file>
+<status>completed</status>
+<summary>Background command "Wait for CI runs and summarize" completed (exit code 0)</summary>
+</task-notification>
+
+> tool: `Bash` - Show CI results
+
+> tool: `Bash` - Write final time spent, refresh logs, commit locally

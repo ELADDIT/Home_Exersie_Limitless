@@ -109,12 +109,12 @@ All were confirmed by hand on 2026-11-10 and are covered by expected-to-fail tes
 
 ## Time spent
 
-About **2 hours** so far on 2026-11-10, starting at 12:15 Israel time:
+About **3 hours 15 minutes** on 2026-11-10, from 12:15 to about 15:30 Israel time:
 
 - ~10 minutes reading the brief, looking at the site, and drafting the planning prompt with Gemini;
-- the rest in one Claude Code session (from 12:25): planning, building, reviewing every test and screenshot, CI and the dashboard, and documentation.
+- the rest in one Claude Code session (from 12:25): planning, building, reviewing every test and screenshot, CI and the dashboard, and documentation. Parts of the test code were written by Sonnet sub-agents from my specs, and every piece was reviewed and run before it was committed.
 
-This will be updated with the final total at submission.
+The time includes waiting out a shared-site outage (about 15:10).
 
 ## Notes and assumptions
 
