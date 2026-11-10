@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+allure-results/
+allure-report/
+test-results/
+.env
+QA_Automation_Take_Home_Brief.pdf
