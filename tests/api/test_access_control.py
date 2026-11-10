@@ -1,3 +1,4 @@
+"""Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role."""
 import pytest
 
 # (role, method path template) -> expected status. {other} = id of another customer.

@@ -1,3 +1,4 @@
+"""Catalog sanity: the store lists products with valid data."""
 import pytest
 
 from toolshop.api.models import ProductPage

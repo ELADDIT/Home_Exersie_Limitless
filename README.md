@@ -3,7 +3,7 @@
 Automated tests for [Toolshop](https://practicesoftwaretesting.com), a practice online hardware store with a web UI and a REST API. This repository holds the first version of its test suite.
 
 **Dashboard (no login needed):** [eladdit.github.io/Home_Exersie_Limitless](https://eladdit.github.io/Home_Exersie_Limitless/)
-It shows the latest run with failure details (steps, screenshots, request/response), plus trend graphs across runs, for each test set and environment.
+The landing page shows the latest status of every test set and environment, a results-per-run chart, the failures in the latest runs, and the full run history. Filters: environment, test set, period. Each card links to the full Allure report of that run (steps, screenshots, request/response, trend graphs) and to the CI run.
 
 | What | Where |
 |---|---|
@@ -49,7 +49,9 @@ To get an HTML report locally, add `--alluredir allure-results` and run `allure 
 
 - `.github/workflows/sanity.yml` runs on every push, and `progression.yml` runs on PRs, `main`, nightly and on demand. Both call `_run-suite.yml`, and both can be started by hand with an environment choice (**Actions → Run workflow**).
 - Tests run inside Microsoft's official Playwright container. Installing the browser took about 2 of the 5 allowed minutes, so the container saves most of that.
-- After each run on `main`, an Allure report is generated and published to GitHub Pages under `/<env>/<set>/`. Each publish carries the previous run's history forward, which gives the trend graphs. Publishing is serialised so parallel runs don't overwrite each other.
+- The **nightly** run (02:00 UTC) runs both sets against **both environments** (`prod` and `with-bugs`).
+- After each run on `main`, an Allure report is generated and published to GitHub Pages under `/<env>/<set>/`, together with a run log (`runs.json`: date, trigger, commit, counts, duration) that the landing dashboard reads. Each publish carries the previous run's Allure history forward. Runs for the same report are queued; different reports publish in parallel, and the push retries if another run got there first.
+- The report sorts problems into categories. "Shared site slow or unreachable" (network timeouts, reported as **broken**) is kept separate from **failed** product checks and from known app bugs, so a red run says *what kind* of red it is.
 - PR runs don't publish, so branches never pollute the team's history. Their raw results and Playwright traces are attached to the run as artifacts.
 
 ## Key design decisions
@@ -61,7 +63,8 @@ To get an HTML report locally, add `--alluredir allure-results` and run `allure 
 5. **Orders are spread across the catalog.** Placing orders uses up real stock on the shared site. Order tests pick a random in-stock product and a random quantity of 1–3, never more than the real stock count (read via the admin API).
 6. **Boundary values are tested** for every validated field: on the limit, just inside, just outside. Dates are computed from today so the tests never go stale.
 7. **Easy to extend.** Shared code lives in `toolshop/` (config, API client, response models, page objects). Collection fails if a test has no `sanity`/`progression` marker, or if the suite exceeds 10 UI tests. See the [new-tester guide](docs/HOW_TO_ADD_A_TEST.md).
-8. **Standard tools only:** pytest, pytest-playwright, pytest-xdist, requests, pydantic (response shapes), Faker, pytest-rerunfailures (network errors only), pytest-check (soft checks in the UI tour), Allure.
+8. **Readable reports without per-test boilerplate.** One hook in `tests/conftest.py` gives every test a readable title, a description (its docstring, else its file's docstring), a product area (Checkout, Access control, …), a severity (sanity = blocker; security and money areas = critical), and tags (set, layer, `known-bug`). New tests get all of it automatically.
+9. **Standard tools only:** pytest, pytest-playwright, pytest-xdist, requests, pydantic (response shapes), Faker, pytest-rerunfailures (network errors only), pytest-check (soft checks in the UI tour), Allure.
 
 ## Bugs found while building
 

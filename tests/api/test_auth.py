@@ -1,3 +1,4 @@
+"""Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists."""
 import pytest
 
 from toolshop.api.models import LoginToken, User

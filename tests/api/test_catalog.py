@@ -1,3 +1,4 @@
+"""Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids."""
 import pytest
 
 from toolshop.api.models import Product, ProductPage

@@ -31,10 +31,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: |
-          python3 -m venv /opt/venv
-          /opt/venv/bin/pip install -q -r requirements.txt
-          echo "/opt/venv/bin" >> "$GITHUB_PATH"
+        # The container is thrown away after the job, so installing into its system Python is fine
+        # (it has no venv module).
+        run: pip install -q --break-system-packages -r requirements.txt
 
       - name: Run ${{ inputs.suite }} tests (4 workers)
         env:
@@ -69,9 +68,10 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: write
-    # Several runs can finish at the same time; serialise writes to the gh-pages branch.
+    # Runs for the same report path are serialised (keeps its history consistent); different paths
+    # publish in parallel and the push below retries, since they touch different folders.
     concurrency:
-      group: gh-pages-publish
+      group: gh-pages-${{ inputs.env }}-${{ inputs.suite }}
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
@@ -101,6 +101,14 @@ jobs:
            "buildUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
            "reportUrl": "$REPORT_URL", "reportName": "Toolshop ${{ inputs.suite }} (${{ inputs.env }})"}
           EOF
+          # Categories: tell "the shared site was slow/unreachable" apart from real product failures.
+          cat > results/allure-results/categories.json <<'EOF'
+          [{"name": "Shared site slow or unreachable (not a product bug)", "matchedStatuses": ["broken"],
+            "messageRegex": ".*(ReadTimeout|ConnectTimeout|ConnectionError|handshake operation timed out|net::ERR_).*"},
+           {"name": "Known app bug (expected to fail)", "matchedStatuses": ["skipped"], "messageRegex": ".*BUG:.*"},
+           {"name": "Product failures", "matchedStatuses": ["failed"]},
+           {"name": "Test errors", "matchedStatuses": ["broken"]}]
+          EOF
           printf 'Environment=%s\nSuite=%s\nCommit=%s\nTrigger=%s\n' \
             "${{ inputs.env }}" "${{ inputs.suite }}" "${{ github.sha }}" "${{ github.event_name }}" \
             > results/allure-results/environment.properties
@@ -113,24 +121,31 @@ jobs:
       - name: Generate Allure report
         run: npx --yes allure-commandline@${ALLURE_VERSION} generate results/allure-results --clean -o report
 
-      - name: Publish to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: report
-          destination_dir: ${{ inputs.env }}/${{ inputs.suite }}
-          keep_files: true
-          commit_message: "Dashboard: ${{ inputs.env }}/${{ inputs.suite }} run ${{ github.run_number }}"
-
-      - name: Publish dashboard index page
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: .github/pages
-          keep_files: true
-          commit_message: "Dashboard index"
+      - name: Publish report and dashboard page to gh-pages
+        env:
+          TARGET: ${{ inputs.env }}/${{ inputs.suite }}
+          RUN_NUMBER: ${{ github.run_number }}
+          TRIGGER: ${{ github.event_name }}
+          COMMIT: ${{ github.sha }}
+          CI_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          export RUN_DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            rm -rf pages && git clone --quiet --depth 1 --branch gh-pages \
+              "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" pages \
+              || { mkdir pages && git -C pages init -q -b gh-pages && git -C pages remote add origin \
+                   "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"; }
+            python3 .github/scripts/record_run.py "pages/$TARGET/runs.json" report/widgets/summary.json runs.json
+            rm -rf "pages/$TARGET" && mkdir -p "pages/$TARGET" && cp -r report/. "pages/$TARGET/" && cp runs.json "pages/$TARGET/"
+            cp -r .github/pages/. pages/ && touch pages/.nojekyll
+            git -C pages add -A
+            git -C pages commit -q -m "Dashboard: $TARGET run ${{ github.run_number }}" || exit 0
+            git -C pages push -q origin gh-pages && exit 0
+            echo "push raced with another run, retrying ($attempt)"; sleep $((attempt * 3))
+          done
+          exit 1
 
       - name: Link in job summary
         run: |

@@ -5,6 +5,7 @@ fresh customer created by the `customer` fixture. The public demo customer accou
 are shared with other people on the internet and are never used. The demo admin
 account is used read-only.
 """
+import inspect
 import random
 
 import allure
@@ -21,6 +22,30 @@ def pytest_addoption(parser):
     parser.addoption("--env", default=None, help="Target environment (prod, with-bugs). Overrides TOOLSHOP_ENV.")
 
 
+# ---- report metadata: set here once, so every test (including new ones) gets it for free ----
+# Product area per test module; the report's "Behaviors" view groups tests by it.
+FEATURE_BY_MODULE = {
+    "test_products": "Catalog", "test_catalog": "Catalog",
+    "test_cart": "Cart", "test_orders": "Orders & invoices", "test_payment": "Payment",
+    "test_auth": "Login", "test_tokens": "Login tokens",
+    "test_access_control": "Access control", "test_access_writes": "Access control",
+    "test_registration": "Registration", "test_boundaries": "Input validation (boundaries)",
+    "test_minor_features": "Minor features (UI/UX)",
+}
+# The UI journeys file covers several areas, so map by a keyword in the test name (first match wins).
+FEATURE_BY_UI_KEYWORD = [("access", "Access control"), ("checkout", "Checkout"), ("login", "Login"),
+                         ("registration", "Registration"), ("catalog", "Catalog"), ("cart", "Cart")]
+CRITICAL_FEATURES = {"Access control", "Login tokens", "Checkout", "Orders & invoices", "Payment"}
+
+
+def feature_of(item) -> str:
+    module = item.module.__name__.rsplit(".", 1)[-1]
+    if module in FEATURE_BY_MODULE:
+        return FEATURE_BY_MODULE[module]
+    name = item.originalname.lower()
+    return next((f for key, f in FEATURE_BY_UI_KEYWORD if key in name), "Other")
+
+
 @pytest.hookimpl(tryfirst=True)  # run before -m deselection so the budget counts the whole suite
 def pytest_collection_modifyitems(config, items):
     ui_count = 0
@@ -34,8 +59,28 @@ def pytest_collection_modifyitems(config, items):
         sets = {m.name for m in item.iter_markers()} & {"sanity", "progression"}
         if len(sets) != 1:
             raise pytest.UsageError(f"{item.nodeid}: mark the test with exactly one of @pytest.mark.sanity / progression")
+        test_set, feature = sets.pop(), feature_of(item)
+        severity = ("blocker" if test_set == "sanity" else "critical" if feature in CRITICAL_FEATURES else "normal")
+        item.add_marker(allure.epic("Toolshop"))
+        item.add_marker(allure.feature(feature))
+        item.add_marker(allure.story(test_set))
+        item.add_marker(allure.severity(severity))
+        item.add_marker(allure.label("layer", "ui" if "/tests/ui/" in path else "api"))
+        if item.get_closest_marker("xfail"):
+            item.add_marker(allure.tag("known-bug"))
+        if not item.function.__doc__ and item.module.__doc__:  # report description: test docstring, else module's
+            item.add_marker(pytest.mark.allure_description(inspect.cleandoc(item.module.__doc__)))
     if ui_count > UI_TEST_BUDGET:
         raise pytest.UsageError(f"{ui_count} UI test cases collected; the budget is {UI_TEST_BUDGET}")
+
+
+@pytest.hookimpl(hookwrapper=True, trylast=True)  # innermost wrapper: runs after Allure sets its defaults
+def pytest_runtest_call(item):
+    """Readable report title for every test, e.g. 'Customer cannot read another customers favorite [guest]'."""
+    title = item.originalname.removeprefix("test_").replace("_", " ").capitalize()
+    case = getattr(getattr(item, "callspec", None), "id", "")
+    allure.dynamic.title(f"{title} [{case}]" if case else title)
+    yield
 
 
 @pytest.fixture(scope="session")

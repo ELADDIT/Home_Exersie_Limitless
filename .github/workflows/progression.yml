@@ -21,8 +21,13 @@ concurrency:
 
 jobs:
   progression:
+    strategy:
+      fail-fast: false
+      matrix:
+        # Nightly covers every environment; other triggers run the chosen one (prod by default).
+        env: ${{ fromJSON(github.event_name == 'schedule' && '["prod","with-bugs"]' || format('["{0}"]', inputs.env || 'prod')) }}
     uses: ./.github/workflows/_run-suite.yml
     with:
       suite: progression
-      env: ${{ inputs.env || 'prod' }}
+      env: ${{ matrix.env }}
     secrets: inherit

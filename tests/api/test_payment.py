@@ -1,3 +1,4 @@
+"""Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected."""
 import pytest
 
 CARD = {"credit_card_number": "0000-0000-0000-0000", "expiration_date": "12/2030", "cvv": "123",

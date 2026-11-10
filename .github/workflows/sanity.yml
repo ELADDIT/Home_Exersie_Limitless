@@ -1,8 +1,10 @@
 name: sanity
 
-# Fast critical-path check on every push (any branch).
+# Fast critical-path check on every push (any branch), plus nightly on every environment.
 on:
   push:
+  schedule:
+    - cron: "0 2 * * *" # nightly: prod AND with-bugs
   workflow_dispatch:
     inputs:
       env:
@@ -18,8 +20,13 @@ concurrency:
 
 jobs:
   sanity:
+    strategy:
+      fail-fast: false
+      matrix:
+        # Nightly covers every environment; other triggers run the chosen one (prod by default).
+        env: ${{ fromJSON(github.event_name == 'schedule' && '["prod","with-bugs"]' || format('["{0}"]', inputs.env || 'prod')) }}
     uses: ./.github/workflows/_run-suite.yml
     with:
       suite: sanity
-      env: ${{ inputs.env || 'prod' }}
+      env: ${{ matrix.env }}
     secrets: inherit

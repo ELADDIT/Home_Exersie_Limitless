@@ -1,3 +1,4 @@
+"""Orders: the invoice total equals the sum of the cart lines, the order appears in the customer's own list, and nobody else can read it."""
 import pytest
 
 from toolshop.api.models import Cart, Invoice, InvoicePage

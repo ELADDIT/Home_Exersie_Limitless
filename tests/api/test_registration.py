@@ -1,3 +1,4 @@
+"""Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password."""
 import pytest
 
 from toolshop.api.models import User

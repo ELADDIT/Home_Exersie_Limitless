@@ -1,3 +1,4 @@
+"""Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged."""
 import pytest
 
 from toolshop.api.models import Cart

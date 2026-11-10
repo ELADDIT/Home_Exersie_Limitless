@@ -93,7 +93,15 @@ If a correct assertion fails because the **app** is wrong, confirm it by hand fi
 
 `strict=True` makes the test go red once the bug is fixed, so someone removes the marker. Never loosen an assertion to make it pass.
 
-## 6. Run it
+## 6. Report labels come for free
+
+Title, product area, severity and tags are set automatically in `tests/conftest.py`:
+- **New test file:** add it to `FEATURE_BY_MODULE` so it lands in the right product area. Otherwise it shows up as "Other".
+- **Docstring:** start the file with a one-line docstring saying what the area covers. It becomes the description of every test in the file.
+- **Test names:** name the test as a sentence, e.g. `test_customer_cannot_read_another_customers_invoice`. The report title is built from it.
+- **Don't rename tests casually:** the id (file, name and case) is what keeps a test's history together on the dashboard.
+
+## 7. Run it
 
 ```bash
 pytest tests/api/test_cart.py -k quantity    # one test while developing
@@ -104,7 +112,7 @@ pytest --env with-bugs -m sanity -n 4        # another environment
 
 Run your new test **3 times** (`for i in 1 2 3; do pytest <your test> -n 4; done`) before opening a PR. A test that fails 1 time in 3 is worse than no test.
 
-## 7. Review checklist (PR reviewers)
+## 8. Review checklist (PR reviewers)
 
 - [ ] Right layer (API unless the screen is the point)?
 - [ ] Exactly one set marker; sanity only if it is truly critical-path?
@@ -114,7 +122,7 @@ Run your new test **3 times** (`for i in 1 2 3; do pytest <your test> -n 4; done
 - [ ] UI: the step under test is done through the screen, includes a mistake → fix path, uses `data-test` selectors, has no sleeps?
 - [ ] Passed 3 runs in a row?
 
-## 8. Things about this shop that will bite you
+## 9. Things about this shop that will bite you
 
 - **Account lock:** after several failed logins, the API locks that email (HTTP 423). Only send wrong passwords for your own fresh `customer`, never a fixed email.
 - **Orders use up real stock** on the shared site. Tests that place orders must use `pick_purchases(n)`: random in-stock products, quantity 1 to 3, capped by the real stock count.
