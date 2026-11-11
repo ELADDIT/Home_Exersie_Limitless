@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/register
-
-Request body:
-{"first_name": "Elizabeth", "last_name": "Willis", "email": "qa.b2d52e477e354ca0a0bbc857439bbe79@example.com", "password": "#*^iX+iw5TzfVf", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
-
-Response 409:
-{"email":["A customer with this email address already exists."]}

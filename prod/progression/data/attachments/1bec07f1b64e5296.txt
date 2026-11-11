@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/change-password
-
-Request body:
-{"current_password": "jC_CTs%pRT7Gxv", "new_password": "Password!!", "new_password_confirmation": "Password!!"}
-
-Response 422:
-{"message":"The new password field must contain at least one number.","errors":{"new_password":["The new password field must contain at least one number."]}}

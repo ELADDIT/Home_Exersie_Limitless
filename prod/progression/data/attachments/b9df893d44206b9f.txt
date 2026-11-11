@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/change-password
+
+Request body:
+{"current_password": "YAN4Vw8d^17^Eu", "new_password": "Password11", "new_password_confirmation": "Password11"}
+
+Response 422:
+{"message":"The new password field must contain at least one symbol.","errors":{"new_password":["The new password field must contain at least one symbol."]}}

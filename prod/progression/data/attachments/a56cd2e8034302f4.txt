@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/products/search?q=Long+Nose+Pliers
+
+Request body:
+
+
+Response 200:
+{"current_page":1,"data":[{"id":"01M74SYVS8N57NJHRY94WN68AA","name":"Long Nose Pliers","description":"Precision long nose pliers with narrow tapered jaws designed for reaching into tight, confined spaces and bending fine wire with accuracy. Made from chrome vanadium steel with induction-hardened cutting edges that cleanly sever copper, brass, and steel wire without crushing or fraying. The slim jaw profile tapers to a fine point, making these pliers indispensable for electrical terminal work, jewelry making, and intricate mechanical repairs. Bi-component comfort grips minimize hand strain during detailed tasks requiring a steady hand and controlled pressure. The leaf-spring joint returns the handles to the open position automatically, speeding up repetitive tasks. A must-have precision tool trusted by electricians, electronics technicians, and hobbyists worldwide.","price":14.24,"is_location_offer":false,"is_rental":false,"co2_rating":"D","in_stock":false,"is_eco_friendly":false,"product_image":{"id":"01M74SYVR1ZV1Y1BETGPDSS2EQ","by_name":"Brett Jordan","by_url":"https:\/\/unsplash.com\/@brett_jordan","source_name":"Unsplash","source_url":"https:\/\/unsplash.com\/photos\/GamuDTVm02g","file_name":"pliers04.avif","title":"Long nose pliers"},"category":{"id":"01M74SYVQERGDGBBX3QRF6XSXP","name":"Pliers"},"brand":{"id":"01M74SYV9C9C4NM7C4Q9WKTRAB","name":"MightyCraft Hardware"}}],"from":1,"last_page":1,"per_page":9,"to":1,"total":1}

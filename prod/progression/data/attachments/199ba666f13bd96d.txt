@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/carts/01m74wram3a4kdwfz5hga5m6vp
+
+Request body:
+{"product_id": "01M74SYVRTGP4V0MRXA2360AWP", "quantity": 100000}
+
+Response 422:
+{"message":"The quantity field must not be greater than 99.","errors":{"quantity":["The quantity field must not be greater than 99."]}}
