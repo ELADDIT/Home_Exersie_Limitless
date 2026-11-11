@@ -1,4 +1,5 @@
 "BROKEN","CATEGORY","FAILED","PASSED","SKIPPED","UNKNOWN"
-"0","Product failures","98","0","0","0"
-"14","Test errors","0","0","0","0"
-"0","Known app bug (expected to fail)","0","0","14","0"
+"0","Product failures","116","0","0","0"
+"13","Test errors","0","0","0","0"
+"0","Known app bug (expected to fail)","0","0","20","0"
+"0","Known issue: blocked by the site's bot protection (Cloudflare) - environment, not a product bug","0","0","7","0"
