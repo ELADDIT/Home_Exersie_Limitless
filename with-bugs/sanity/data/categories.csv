@@ -1,3 +1,4 @@
 "BROKEN","CATEGORY","FAILED","PASSED","SKIPPED","UNKNOWN"
-"0","Product failures","6","0","0","0"
+"0","Product failures","4","0","0","0"
 "1","Test errors","0","0","0","0"
+"0","Known issue: blocked by the site's bot protection (Cloudflare) - environment, not a product bug","0","0","3","0"

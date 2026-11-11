@@ -1,7 +1,0 @@
-POST https://api-with-bugs.practicesoftwaretesting.com/users/login
-
-Request body:
-{"email": "admin@practicesoftwaretesting.com", "password": "welcome01"}
-
-Response 200:
-{"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS13aXRoLWJ1Z3MucHJhY3RpY2Vzb2Z0d2FyZXRlc3RpbmcuY29tL3VzZXJzL2xvZ2luIiwiaWF0IjoxNzk0MzEzMjYyLCJleHAiOjE4MDk5MTMyNjIsIm5iZiI6MTc5NDMxMzI2MiwianRpIjoidThTR084VVI0UW1iMjZqdCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3Iiwicm9sZSI6ImFkbWluIn0.0VoyJHBzMGOUVXZ1Ae0SESEJzl71Sn6_KGGw4qBWMQU","token_type":"bearer","expires_in":15600000}
