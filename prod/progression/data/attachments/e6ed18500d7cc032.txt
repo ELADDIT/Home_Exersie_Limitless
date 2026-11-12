@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/favorites
-
-Request body:
-{"product_id": "01M74SYVRTGP4V0MRXA2360AWP"}
-
-Response 201:
-{"product_id":"01M74SYVRTGP4V0MRXA2360AWP","user_id":"01m74wr3h436m7pgfnn5v28n06","id":"01m74wr5bmwtvmn88qf14r7d3e"}

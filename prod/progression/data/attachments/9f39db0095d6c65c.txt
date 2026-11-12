@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/register
+
+Request body:
+{"first_name": "Christopher", "last_name": "Davis", "email": "qa.4bc3d8ff39ca45ed8517d585ed725e56@example.com", "password": "Ab1$xxx", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
+
+Response 422:
+{"password":["The password field must be at least 8 characters."]}

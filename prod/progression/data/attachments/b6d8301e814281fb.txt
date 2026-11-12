@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/login
-
-Request body:
-{"email": "qa.c9fa9f0294d84c73b15728a0f3d7fc26@example.com", "password": "Ab1!"}
-
-Response 401:
-{"error":"Unauthorized"}

@@ -1,6 +1,0 @@
-DELETE https://api.practicesoftwaretesting.com/carts/01m74wrj0kxbpx6j93wfwhb06e/product/01M74SYVRTGP4V0MRXA2360AWP
-
-Request body:
-
-
-Response 204:

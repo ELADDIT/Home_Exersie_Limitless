@@ -1,0 +1,7 @@
+PUT https://api.practicesoftwaretesting.com/carts/01m77ghvmps4zxm7t14a3ztkms/product/quantity
+
+Request body:
+{"product_id": "01M77FSAZ9GW5PF7PSNPHNR5AZ", "quantity": 0}
+
+Response 422:
+{"message":"The quantity field must be at least 1.","errors":{"quantity":["The quantity field must be at least 1."]}}
