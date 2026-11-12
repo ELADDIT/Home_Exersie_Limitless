@@ -1,7 +1,0 @@
-POST https://api-with-bugs.practicesoftwaretesting.com/users/register
-
-Request body:
-{"first_name": "Adam", "last_name": "Andrade", "email": "qa.ef3bbeb9fd5146e2bcfe8ca0108c0350@example.com", "password": "v0DJnow6m$4DW6", "dob": "1926-11-11", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
-
-Response 422:
-{"address":["The address field must be a string."],"city":["The city field is required."],"country":["The country field is required."],"dob":["Customer must be younger than 75 years old."]}

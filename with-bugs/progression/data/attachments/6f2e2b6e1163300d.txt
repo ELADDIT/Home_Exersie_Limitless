@@ -1,7 +1,0 @@
-POST https://api-with-bugs.practicesoftwaretesting.com/users/register
-
-Request body:
-{"first_name": "Colin", "last_name": "777777777777777777777", "email": "qa.c252602cf7b34863ba199174bbaa9cd0@example.com", "password": ")*%&We@ta(L2WC", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
-
-Response 422:
-{"last_name":["The last name field format is invalid.","The last name field must not be greater than 20 characters."],"address":["The address field must be a string."],"city":["The city field is required."],"country":["The country field is required."]}
