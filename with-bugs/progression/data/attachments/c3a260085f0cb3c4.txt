@@ -1,7 +1,0 @@
-POST https://api-with-bugs.practicesoftwaretesting.com/users/register
-
-Request body:
-{"first_name": "777777777777777777777777777777777777777", "last_name": "Watkins", "email": "qa.af0b76d20df34eb4bf336cc4af4e05a7@example.com", "password": "&rpPW_gn*_9!uO", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
-
-Response 422:
-{"first_name":["The first name field format is invalid."],"address":["The address field must be a string."],"city":["The city field is required."],"country":["The country field is required."]}
