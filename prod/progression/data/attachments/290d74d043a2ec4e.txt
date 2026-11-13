@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/register
-
-Request body:
-{"first_name": "Angela", "last_name": "777777777777777777777", "email": "qa.c10a8d050b7840bdbb4699987ad56850@example.com", "password": "#p(2knZTgnSZo9", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
-
-Response 422:
-{"last_name":["The last name field must not be greater than 20 characters."]}

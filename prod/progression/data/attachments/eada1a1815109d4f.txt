@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/register
+
+Request body:
+{"first_name": "Leslie", "last_name": "Mcclure", "email": "qa.44c045d1898647108a8eb456443c0909@example.com", "password": "*b9effvt39WJ(R", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "77777777777", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
+
+Response 422:
+{"address.house_number":["The address.house number field must not be greater than 10 characters."]}

@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/register
+
+Request body:
+{"first_name": "Walter", "last_name": "Hall", "email": "qa.506bc84d67ff42e9af3a14e3a99c21b1@example.com", "password": "Abcdefgh!x", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
+
+Response 422:
+{"password":["The password field must contain at least one number."]}

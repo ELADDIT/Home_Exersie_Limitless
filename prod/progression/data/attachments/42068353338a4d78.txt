@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/change-password
-
-Request body:
-{"current_password": "+3jy4zA&aJI)Th", "new_password": "PASSWORD1!", "new_password_confirmation": "PASSWORD1!"}
-
-Response 422:
-{"message":"The new password field must contain at least one uppercase and one lowercase letter.","errors":{"new_password":["The new password field must contain at least one uppercase and one lowercase letter."]}}

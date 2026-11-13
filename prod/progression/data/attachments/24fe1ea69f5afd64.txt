@@ -1,7 +1,0 @@
-PUT https://api.practicesoftwaretesting.com/invoices/01m77gh7z7v6fk03t23hjctd3n/status
-
-Request body:
-{"status": "ON_HOLD", "status_message": "x"}
-
-Response 422:
-{"message":"The status message field must be between 5 and 50 characters.","errors":{"status_message":["The status message field must be between 5 and 50 characters."]}}

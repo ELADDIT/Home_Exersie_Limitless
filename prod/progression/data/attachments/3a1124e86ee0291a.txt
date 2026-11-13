@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/messages
+
+Request body:
+{"subject": "customer-service", "message": "private-0191f0e7cf4a4ef6b30a0e6f528178fe please call me back about my order. please call me back about my order. please call me back about my order. "}
+
+Response 200:
+{"subject":"customer-service","message":"private-0191f0e7cf4a4ef6b30a0e6f528178fe please call me back about my order. please call me back about my order. please call me back about my order. ","user_id":"01m7a2afbc1sh99pbb20mzft39","status":"NEW","id":"01m7a2ah97fwyem6dwt92bcdb4","created_at":"2026-11-13 09:02:54"}
