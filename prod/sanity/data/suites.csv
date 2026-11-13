@@ -1,12 +1,12 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
 "Browser tests. Every step under test goes through the screen. The API is used only for preconditions
-(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_guest_searches_and_adds_product_to_cart[chromium]","tests.ui","2026-11-12","skipped","2026-11-12","","test_shop_ui","",""
-"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1210","Guest can create cart and add product","tests.api","2026-11-12","passed","2026-11-12","","test_cart","",""
-"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","824","Fresh customer can log in and use the token","tests.api","2026-11-12","passed","2026-11-12","","test_auth","",""
-"Orders: the invoice total equals the sum of the cart lines, the order appears in the customer's own list, and nobody else can read it.","864","Order total equals sum of lines","tests.api","2026-11-12","passed","2026-11-12","","test_orders","",""
-"Orders: the invoice total equals the sum of the cart lines, the order appears in the customer's own list, and nobody else can read it.","1627","Customer cannot read another customers invoice","tests.api","2026-11-12","passed","2026-11-12","","test_orders","",""
-"Catalog sanity: the store lists products with valid data.","404","Product catalog lists products","tests.api","2026-11-12","passed","2026-11-12","","test_products","",""
+(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_login_wrong_password_then_correct[chromium]","tests.ui","2026-11-13","skipped","2026-11-13","","test_shop_ui","",""
+"Catalog sanity: the store lists products with valid data.","406","Product catalog lists products","tests.api","2026-11-13","passed","2026-11-13","","test_products","",""
+"Orders: the invoice total equals the sum of the cart lines, the order appears in the customer's own list, and nobody else can read it.","976","Order total equals sum of lines","tests.api","2026-11-13","passed","2026-11-13","","test_orders","",""
+"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","819","Fresh customer can log in and use the token","tests.api","2026-11-13","passed","2026-11-13","","test_auth","",""
 "Browser tests. Every step under test goes through the screen. The API is used only for preconditions
-(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_checkout_cash_on_delivery[chromium]","tests.ui","2026-11-12","skipped","2026-11-12","","test_shop_ui","",""
+(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_guest_searches_and_adds_product_to_cart[chromium]","tests.ui","2026-11-13","skipped","2026-11-13","","test_shop_ui","",""
 "Browser tests. Every step under test goes through the screen. The API is used only for preconditions
-(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_login_wrong_password_then_correct[chromium]","tests.ui","2026-11-12","skipped","2026-11-12","","test_shop_ui","",""
+(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_checkout_cash_on_delivery[chromium]","tests.ui","2026-11-13","skipped","2026-11-13","","test_shop_ui","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1153","Guest can create cart and add product","tests.api","2026-11-13","passed","2026-11-13","","test_cart","",""
+"Orders: the invoice total equals the sum of the cart lines, the order appears in the customer's own list, and nobody else can read it.","1627","Customer cannot read another customers invoice","tests.api","2026-11-13","passed","2026-11-13","","test_orders","",""
