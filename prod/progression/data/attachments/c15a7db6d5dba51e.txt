@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/reports/average-sales-per-month?year=2024
+
+Request body:
+
+
+Response 200:
+[{"month":1,"average":221.246667,"amount":3},{"month":2,"average":290.46625,"amount":8},{"month":3,"average":230.765,"amount":2},{"month":4,"average":376.97,"amount":1},{"month":5,"average":545.45,"amount":1},{"month":6,"average":0,"amount":0},{"month":7,"average":244.016667,"amount":6},{"month":8,"average":74.46,"amount":2},{"month":9,"average":362.42,"amount":2},{"month":10,"average":166.396667,"amount":6},{"month":11,"average":0,"amount":0},{"month":12,"average":227.92,"amount":1}]

@@ -1,0 +1,6 @@
+DELETE https://api.practicesoftwaretesting.com/carts/01m7cjztfzdzw4v9r6yfyz2c0p/product/01M7CH4R4H60ZD2D9BZ6NSBM3V
+
+Request body:
+
+
+Response 204:

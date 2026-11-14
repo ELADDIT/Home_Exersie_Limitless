@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/users/refresh
+
+Request body:
+
+
+Response 200:
+{"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5wcmFjdGljZXNvZnR3YXJldGVzdGluZy5jb20vdXNlcnMvcmVmcmVzaCIsImlhdCI6MTc5NDY0NTE4OCwiZXhwIjoxNzk0NjQ1NDg5LCJuYmYiOjE3OTQ2NDUxODksImp0aSI6ImRrd1lBTmlBOExQRzZ6TUQiLCJzdWIiOiIwMW03Y2swcWZzNHZrZjRoNWZrazNmOWV0eiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJyb2xlIjoidXNlciJ9.5EvGa71BY1HbL1gKxHzgoMLLUQJzkqE38prxGuh9ZKM","token_type":"bearer","expires_in":300}

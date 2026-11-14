@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/login
+
+Request body:
+{"email": "qa.00a804d2e86f4cfcb7fc3e4b8407cd00@example.com", "password": "5h79!PurY@vI(%"}
+
+Response 200:
+{"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5wcmFjdGljZXNvZnR3YXJldGVzdGluZy5jb20vdXNlcnMvbG9naW4iLCJpYXQiOjE3OTQ2NDUxODUsImV4cCI6MTc5NDY0NTQ4NSwibmJmIjoxNzk0NjQ1MTg1LCJqdGkiOiJJVlVZYjk2Z3YwcU1saFE1Iiwic3ViIjoiMDFtN2NrMG1uZXQxejl3ZDlmbTBhODNkNngiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3Iiwicm9sZSI6InVzZXIifQ.O4sqzoALdttayqqS-CTWHKV-TJq9WFcBsngdXDBxdiw","token_type":"bearer","expires_in":300}

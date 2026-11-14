@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/carts/01m7cjzzz5wzmemw0xxspvsp83
+
+Request body:
+
+
+Response 200:
+{"id":"01m7cjzzz5wzmemw0xxspvsp83","additional_discount_percentage":null,"lat":null,"lng":null,"cart_items":[{"id":"01m7ck00brckxc67srk330ptj6","quantity":1,"discount_percentage":null,"cart_id":"01m7cjzzz5wzmemw0xxspvsp83","product_id":"01M7CH4R4Y5VKC676XE74GBHM3","product":{"id":"01M7CH4R4Y5VKC676XE74GBHM3","name":"Pliers","description":"Reliable general-purpose pliers crafted from drop-forged carbon steel for long-lasting durability in demanding working conditions. The serrated jaws provide a firm grip on a variety of materials including wire, nails, small fasteners, and irregularly shaped objects. Comfortable rubber-coated handles absorb vibration and reduce hand fatigue during extended use, while the non-slip surface ensures confident handling. The precision pivot joint maintains alignment under load, delivering smooth, controlled jaw action with every squeeze. Heat-treated steel construction resists wear and deformation even under heavy use. A must-have foundational tool for any workshop, equally suited for professional tradespeople and home repair projects.","price":12.01,"is_location_offer":false,"is_rental":false,"co2_rating":"D","in_stock":true,"is_eco_friendly":false}}]}

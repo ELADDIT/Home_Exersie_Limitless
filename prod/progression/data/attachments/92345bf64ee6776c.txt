@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/register
+
+Request body:
+{"first_name": "Brett", "last_name": "Carson", "email": "qa.e8eb98ef6c2f40c59e93c479ac1eb20d@example.com", "password": "7!0MdV3Svt^OHq", "dob": "1990-02-30", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
+
+Response 422:
+{"dob":["The dob field must be a valid date.","The dob field must match the format Y-m-d."]}

@@ -1,7 +1,0 @@
-GET https://api.practicesoftwaretesting.com/reports/total-sales-of-years
-
-Request body:
-
-
-Response 200:
-[{"year":2025,"total":0},{"year":2026,"total":28.3}]
