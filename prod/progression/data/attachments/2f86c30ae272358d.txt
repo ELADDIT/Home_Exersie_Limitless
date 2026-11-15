@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/users/me
+
+Request body:
+
+
+Response 200:
+{"id":"01m7f6a8r4etczrhmqasbbgrhr","provider":null,"first_name":"Jason","last_name":"Lee","phone":"0612345678","dob":"1990-01-15","email":"qa.beed1b6ecac0443b8ea0328be361883c@example.com","totp_enabled":false,"created_at":"2026-11-15 08:48:52","address":{"street":"Lesingel 8","house_number":"8","city":"Steensel","state":"Noord-Holland","country":"NL","postal_code":"1012AB"}}

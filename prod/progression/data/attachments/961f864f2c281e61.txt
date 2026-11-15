@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/users/01m7f68f082h7zn9pm4gh771jm
+
+Request body:
+
+
+Response 404:
+{"error":"You are not authorized to view this user."}
