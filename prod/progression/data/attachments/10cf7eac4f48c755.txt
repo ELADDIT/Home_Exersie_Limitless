@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/register
+
+Request body:
+{"first_name": "Donald", "last_name": "Torres", "email": "qa.9cf1ee8da22f483d89ef0fe3e67fbd6c@example.com", "password": "h%b8%Gq)y*^ZWz", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
+
+Response 201:
+{"first_name":"Donald","last_name":"Torres","email":"qa.9cf1ee8da22f483d89ef0fe3e67fbd6c@example.com","dob":"1990-01-15","phone":"0612345678","id":"01m7hs7k5ka6jtezv2rhf81rwv","created_at":"2026-11-16 08:57:56","address":{"street":"Lesingel 8","house_number":"8","city":"Steensel","state":"Noord-Holland","country":"NL","postal_code":"1012AB"}}

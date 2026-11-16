@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/carts/01m7f69derwaxtrmw2m9hx9pt4
-
-Request body:
-{"product_id": "01M7F3HERVRD4P92X2FXYSK5RK", "quantity": 0}
-
-Response 422:
-{"message":"The quantity field must be at least 1.","errors":{"quantity":["The quantity field must be at least 1."]}}

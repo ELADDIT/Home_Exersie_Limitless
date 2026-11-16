@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/favorites
-
-Request body:
-{"product_id": "01M7F3HERVRD4P92X2FXYSK5RK"}
-
-Response 201:
-{"product_id":"01M7F3HERVRD4P92X2FXYSK5RK","user_id":"01m7f68ntc6smz3c2336mkcp58","id":"01m7f68qn1z7hqyzg935beby3e"}
