@@ -1,0 +1,7 @@
+PUT https://api.practicesoftwaretesting.com/carts/01m7mfkjxw7kmy0kzkm7qgn8gg/product/quantity
+
+Request body:
+{"product_id": "01M7MF6KA72YEV740W8CXVYF94", "quantity": 100}
+
+Response 422:
+{"message":"The quantity field must not be greater than 99.","errors":{"quantity":["The quantity field must not be greater than 99."]}}

@@ -1,7 +1,0 @@
-GET https://api.practicesoftwaretesting.com/favorites/01m7hs8hwg3w41wnmw1jhpwssr
-
-Request body:
-
-
-Response 200:
-{"id":"01m7hs8hwg3w41wnmw1jhpwssr","user_id":"01m7hs8fzwxk88092g568cym7v","product_id":"01M7HRNPSYVZHNJ8MT843MNXYP"}

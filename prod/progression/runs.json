@@ -158,5 +158,21 @@
    "total": 175
   },
   "duration_ms": 97299
+ },
+ {
+  "run": 14,
+  "date": "2026-11-17T10:09:23Z",
+  "trigger": "schedule",
+  "commit": "5b1a76c",
+  "ci_url": "https://github.com/ELADDIT/Home_Exersie_Limitless/actions/runs/44061595324",
+  "stats": {
+   "failed": 0,
+   "broken": 8,
+   "skipped": 32,
+   "passed": 135,
+   "unknown": 0,
+   "total": 175
+  },
+  "duration_ms": 160295
  }
 ]

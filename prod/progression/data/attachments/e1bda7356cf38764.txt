@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/change-password
-
-Request body:
-{"current_password": "d%IvVv@7G1ik@2x", "new_password": "j!9*2JqGx6I_@1", "new_password_confirmation": "j!9*2JqGx6I_@1"}
-
-Response 400:
-{"success":false,"message":"Your current password does not matches with the password."}

@@ -1,0 +1,7 @@
+DELETE https://api.practicesoftwaretesting.com/users/01m7mfj1kgq0hc19kcb0jvk1e9
+
+Request body:
+
+
+Response 403:
+{"message":"Forbidden"}

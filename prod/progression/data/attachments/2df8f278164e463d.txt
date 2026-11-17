@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/invoices
+
+Request body:
+{"billing_street": "Lesingel 8", "billing_city": "Steensel", "billing_state": "Noord-Holland", "billing_country": "NL", "billing_postal_code": "1012AB", "payment_method": "buy-now-pay-later", "payment_details": {"monthly_installments": "6"}, "cart_id": "01m7mfm8tvx9kc6r5wsjjavv97"}
+
+Response 201:
+{"billing_street":"Lesingel 8","billing_city":"Steensel","billing_state":"Noord-Holland","billing_country":"NL","billing_postal_code":"1012AB","user_id":"01m7mfm7wdj12h54c5hadfv83g","invoice_date":"2026-11-17T10:07:51.511003Z","invoice_number":"INV-2026000012","id":"01m7mfmapxe8jn2zxxb1w8twsh","created_at":"2026-11-17T10:07:51.000000Z","subtotal":12.58,"total":12.58,"additional_discount_percentage":null,"additional_discount_amount":0,"eco_discount_percentage":0,"eco_discount_amount":0}

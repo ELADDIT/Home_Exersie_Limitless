@@ -1,7 +1,0 @@
-GET https://api.practicesoftwaretesting.com/messages/01m7hs8s1xgkza45fempvbvm12
-
-Request body:
-
-
-Response 200:
-[]
