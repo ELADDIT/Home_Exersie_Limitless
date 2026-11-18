@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/register
+
+Request body:
+{"first_name": "James", "last_name": "Elliott", "email": "qa.639f4cbc6d1d42b787a5cfb9385ba3f6@example.com", "password": "v1X$5&XA(VSrsY", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "77777777777777777777777777777777777777777", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
+
+Response 422:
+{"address.city":["The address.city field must not be greater than 40 characters."]}

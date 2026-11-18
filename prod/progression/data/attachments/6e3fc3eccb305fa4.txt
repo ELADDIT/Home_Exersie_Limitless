@@ -1,6 +1,0 @@
-DELETE https://api.practicesoftwaretesting.com/favorites/01m7mfjm08anwmea5kbjkp1djm
-
-Request body:
-
-
-Response 204:

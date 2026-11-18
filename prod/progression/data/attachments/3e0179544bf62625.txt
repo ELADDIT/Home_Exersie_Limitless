@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/users/me
+
+Request body:
+
+
+Response 401:
+{"message":"Unauthorized"}

@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/messages/01m7q0jwcdrw22q98gfyhwa9b9
+
+Request body:
+
+
+Response 200:
+{"id":"01m7q0jwcdrw22q98gfyhwa9b9","user_id":"01m7q0jv202dfae3yxykj3vyf1","name":null,"email":null,"subject":"customer-service","message":"private-ef08a2c34c73410e9297de54d52cf3fe please call me back about my order. please call me back about my order. please call me back about my order. ","status":"NEW","created_at":"2026-11-18 09:42:38","user":{"id":"01m7q0jv202dfae3yxykj3vyf1","provider":null,"first_name":"Tracy","last_name":"Patel","phone":"0612345678","dob":"1990-01-15","email":"qa.7c509d9f454d49c1868c80f409f0aea4@example.com","totp_enabled":false,"created_at":"2026-11-18 09:42:37","address":{"street":"Lesingel 8","house_number":"8","city":"Steensel","state":"Noord-Holland","country":"NL","postal_code":"1012AB"}},"replies":[]}

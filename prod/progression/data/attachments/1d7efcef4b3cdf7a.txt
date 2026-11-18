@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/users/logout
+
+Request body:
+
+
+Response 200:
+{"message":"Successfully logged out"}

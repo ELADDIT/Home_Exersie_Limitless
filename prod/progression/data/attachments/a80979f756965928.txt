@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/login
+
+Request body:
+{"email": "qa.624c28f2c784419fb1be78b45fe52baa@example.com", "password": ""}
+
+Response 401:
+{"error":"Invalid login request"}

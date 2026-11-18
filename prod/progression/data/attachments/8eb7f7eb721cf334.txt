@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/carts
-
-Request body:
-
-
-Response 201:
-{"id":"01m7mfkp8zsf0z97hrnzen545m"}
