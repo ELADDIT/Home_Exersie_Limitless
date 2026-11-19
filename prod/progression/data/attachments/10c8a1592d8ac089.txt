@@ -1,7 +1,0 @@
-GET https://api.practicesoftwaretesting.com/users/01m7q0j26wx06qqetw8t9tpjjw
-
-Request body:
-
-
-Response 401:
-{"message":"Unauthorized"}

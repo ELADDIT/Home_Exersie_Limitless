@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/invoices
+
+Request body:
+{"billing_street": "Lesingel 8", "billing_city": "Steensel", "billing_state": "Noord-Holland", "billing_country": "NL", "billing_postal_code": "1012AB", "payment_method": "bank-transfer", "payment_details": {"bank_name": "Test Bank", "account_name": "Jane Doe", "account_number": "123456"}, "cart_id": "01m7skdqjhkz3bkn92g7fnmsbg"}
+
+Response 201:
+{"billing_street":"Lesingel 8","billing_city":"Steensel","billing_state":"Noord-Holland","billing_country":"NL","billing_postal_code":"1012AB","user_id":"01m7skdps3qnmd24d5hmvz51hj","invoice_date":"2026-11-19T09:50:23.342185Z","invoice_number":"INV-2026000049","id":"01m7skds3nbdq51cs7wngz361p","created_at":"2026-11-19T09:50:23.000000Z","subtotal":12.58,"total":12.58,"additional_discount_percentage":null,"additional_discount_amount":0,"eco_discount_percentage":0,"eco_discount_amount":0}

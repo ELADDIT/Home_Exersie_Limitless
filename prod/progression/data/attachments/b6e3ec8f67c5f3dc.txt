@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/register
+
+Request body:
+{"first_name": "Wendy", "email": "qa.95b8786f5e0646feafb55da3eef3c019@example.com", "password": "@ui)vHSl!6OQHp", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
+
+Response 422:
+{"last_name":["The last name field is required."]}
