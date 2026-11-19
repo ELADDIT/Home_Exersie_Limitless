@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/invoices/01m7sjsjbv3e2z0qay4q9d52fy
+
+Request body:
+
+
+Response 404:
+{"message":"Requested item not found"}
