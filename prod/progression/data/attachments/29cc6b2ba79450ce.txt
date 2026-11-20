@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/register
-
-Request body:
-{"first_name": "Timothy", "last_name": "Lane", "email": "qa.ee4b52e415c94df3a3e8d36a38275e47@example.com", "password": "abcdefg1!x", "dob": "1990-01-15", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
-
-Response 422:
-{"password":["The password field must contain at least one uppercase and one lowercase letter."]}

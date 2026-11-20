@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/carts/01m7skc9p5yd35tx5df7z59enw
-
-Request body:
-{"product_id": "01M7SGJ9H0C3KDWTXN3KSJRRRA", "quantity": 2}
-
-Response 200:
-{"result":"item added or updated"}

@@ -1,331 +1,324 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","454","Customer cannot delete catalog items [brand]","tests.api","2026-11-19","passed","2026-11-19","","test_access_writes","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","364","Endpoint access by role [admin-messages]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Orders: the invoice total equals the sum of the cart lines, the order appears in the customer's own list, and nobody else can read it.","1344","Order appears in own invoice list with matching lines","tests.api","2026-11-19","passed","2026-11-19","","test_orders","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","381","Customer cannot delete catalog items [product]","tests.api","2026-11-19","passed","2026-11-19","","test_access_writes","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1312","Weak new password is rejected [no-lowercase]","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","632","Registration with invalid email is rejected [plainaddress]","tests.api","2026-11-20","skipped","2026-11-20","","test_registration","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","552","Registration without required field is rejected [email]","tests.api","2026-11-20","passed","2026-11-20","","test_registration","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","1366","Cart quantity limits on update [max-plus-1]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","361","Endpoint access by role [guest-other-user]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","327","Endpoint access by role [guest-sales-report]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1329","Updating to invalid quantity is rejected and cart unchanged [zero]","tests.api","2026-11-19","passed","2026-11-19","","test_cart","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","336","Guest cannot write catalog [create-brand]","tests.api","2026-11-19","skipped","2026-11-19","","test_access_writes","",""
+Dates are computed from today, so the tests never go stale.","585","Registration field length limits [max-plus-1-address.state]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1447","Updating to invalid quantity is rejected and cart unchanged [negative]","tests.api","2026-11-20","passed","2026-11-20","","test_cart","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","769","City not in country is rejected","tests.api","2026-11-20","passed","2026-11-20","","test_checkout_rules","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","718","Registration field length limits [max-minus-1-phone]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
+Dates are computed from today, so the tests never go stale.","528","Registration field length limits [max-plus-1-first_name]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","632","Registration field length limits [max-minus-1-first_name]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1526","Endpoint access by role [customer-invoices]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1678","Endpoint access by role [customer-users-list]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","1295","Out of stock product cannot be ordered","tests.api","2026-11-19","skipped","2026-11-19","","test_checkout_rules","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","329","Valid payment is accepted [buy-now-pay-later]","tests.api","2026-11-19","passed","2026-11-19","","test_payment","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","330","Customer cannot read admin reports [total-sales-per-country]","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
-"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","310","Login with bad credentials is rejected without token [malformed-email]","tests.api","2026-11-19","passed","2026-11-19","","test_auth","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","3508","Every product can be found by its full name","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","622","Registration field length limits [at-max-first_name]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","346","Guest cannot write catalog [create-product]","tests.api","2026-11-19","skipped","2026-11-19","","test_access_writes","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","1528","Registering with admin role does not grant admin","tests.api","2026-11-19","passed","2026-11-19","","test_access_writes","",""
-"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","317","Login with bad credentials is rejected without token [unknown-email]","tests.api","2026-11-19","passed","2026-11-19","","test_auth","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","340","Unknown product id is 404","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","530","Customer turning 18 today can register","tests.api","2026-11-19","skipped","2026-11-19","","test_boundaries","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","500","Date of birth age limits [impossible-date]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1867","Invalid cart input is rejected and cart unchanged [negative-quantity]","tests.api","2026-11-19","passed","2026-11-19","","test_cart","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","331","Endpoint access by role [admin-sales-report]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","548","Registration field length limits [max-plus-1-address.state]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","336","Login with bad credentials is rejected without token [no-fields]","tests.api","2026-11-19","passed","2026-11-19","","test_auth","",""
-"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1811","Invalid cart input is rejected and cart unchanged [huge-quantity]","tests.api","2026-11-19","passed","2026-11-19","","test_cart","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","332","Valid payment is accepted [credit-card]","tests.api","2026-11-19","passed","2026-11-19","","test_payment","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","500","Missing billing field is rejected [postal_code]","tests.api","2026-11-19","skipped","2026-11-19","","test_checkout_rules","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","559","Date of birth age limits [age-100]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","520","Registration with existing email is rejected as duplicate","tests.api","2026-11-19","passed","2026-11-19","","test_registration","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","364","Registration enforces password policy [no-lowercase]","tests.api","2026-11-19","passed","2026-11-19","","test_registration","",""
+Dates are computed from today, so the tests never go stale.","646","Registration field length limits [at-max-phone]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1435","Endpoint access by role [customer-invoices]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","344","Invalid payment is rejected [credit-card-bad-number]","tests.api","2026-11-20","passed","2026-11-20","","test_payment","",""
 "Browser tests. Every step under test goes through the screen. The API is used only for preconditions
-(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_registration_invalid_then_valid[chromium]","tests.ui","2026-11-19","skipped","2026-11-19","","test_shop_ui","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","421","Registration enforces password policy [no-digit]","tests.api","2026-11-19","passed","2026-11-19","","test_registration","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","307","Invalid payment is rejected [credit-card-no-details]","tests.api","2026-11-19","passed","2026-11-19","","test_payment","",""
+(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_cart_quantity_change_and_remove[chromium]","tests.ui","2026-11-20","skipped","2026-11-20","","test_shop_ui","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","1058","Cart quantity limits on add [min-1]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","416","Endpoint access by role [guest-users-list]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
+Dates are computed from today, so the tests never go stale.","1098","Cart quantity limits on add [min-1]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1417","Weak new password is rejected [too-short]","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","461","Registration field length limits [max-plus-1-address.city]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1396","Update quantity changes the line","tests.api","2026-11-19","passed","2026-11-19","","test_cart","",""
-"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1674","Adding same product twice accumulates quantity","tests.api","2026-11-19","passed","2026-11-19","","test_cart","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","319","Invalid payment is rejected [gift-card-no-details]","tests.api","2026-11-19","passed","2026-11-19","","test_payment","",""
-"Browser tests. Every step under test goes through the screen. The API is used only for preconditions
-(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_checkout_credit_card_invalid_then_valid[chromium]","tests.ui","2026-11-19","skipped","2026-11-19","","test_shop_ui","",""
+Dates are computed from today, so the tests never go stale.","740","Registration field length limits [max-minus-1-phone]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1596","Endpoint access by role [customer-monthly-report]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","369","Customer cannot read admin reports [top10-purchased-products]","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","373","Price range filter is respected","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","996","Cart quantity limits on add [max-plus-1]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","852","Login error does not reveal whether the email exists","tests.api","2026-11-19","passed","2026-11-19","","test_auth","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","805","Empty cart cannot be ordered","tests.api","2026-11-19","skipped","2026-11-19","","test_checkout_rules","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","335","Customer cannot read admin reports [top10-best-selling-categories]","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","1086","Cart quantity limits on add [max-99]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","993","Order is created with each payment method [buy-now-pay-later]","tests.api","2026-11-19","passed","2026-11-19","","test_checkout_rules","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","729","Date of birth age limits [turned-18-yesterday]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","334","Password minimum length [7-chars]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","353","Price range filter is respected","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1288","Weak new password is rejected [too-short]","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","355","Invalid payment is rejected [empty-method]","tests.api","2026-11-19","skipped","2026-11-19","","test_payment","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1430","Endpoint access by role [customer-me]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","310","Invalid payment is rejected [bnpl-no-installments]","tests.api","2026-11-19","passed","2026-11-19","","test_payment","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","610","Registration field length limits [at-max-last_name]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1805","Customer cannot read another customers contact message","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","637","Password minimum length [9-chars]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","870","Endpoint access by role [admin-monthly-report]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","671","City not in country is rejected","tests.api","2026-11-19","passed","2026-11-19","","test_checkout_rules","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","821","Order is created with each payment method [cash-on-delivery]","tests.api","2026-11-19","passed","2026-11-19","","test_checkout_rules","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","321","Valid payment is accepted [cash-on-delivery]","tests.api","2026-11-19","passed","2026-11-19","","test_payment","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","360","Guest cannot write catalog [update-brand]","tests.api","2026-11-19","skipped","2026-11-19","","test_access_writes","",""
-"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","306","Login with bad credentials is rejected without token [empty-fields]","tests.api","2026-11-19","passed","2026-11-19","","test_auth","",""
-"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","634","Login with bad credentials is rejected without token [wrong-password]","tests.api","2026-11-19","passed","2026-11-19","","test_auth","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","688","Registration field length limits [at-max-address.house_number]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","336","Endpoint access by role [admin-other-user]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","334","Endpoint access by role [guest-monthly-report]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","400","Customer cannot search all users","tests.api","2026-11-19","skipped","2026-11-19","","test_access_writes","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","330","Invalid payment is rejected [credit-card-bad-number]","tests.api","2026-11-19","passed","2026-11-19","","test_payment","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","706","Pagination meta is consistent","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
-"Login token (JWT) handling: a stolen, forged or old token must not work.","348","Token with edited role is rejected","tests.api","2026-11-19","passed","2026-11-19","","test_tokens","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1467","Weak new password is rejected [no-digit]","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
-"Browser tests. Every step under test goes through the screen. The API is used only for preconditions
-(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_catalog_filter_by_category_and_sort_by_price[chromium]","tests.ui","2026-11-19","skipped","2026-11-19","","test_shop_ui","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","566","Registration without required field is rejected [last_name]","tests.api","2026-11-19","passed","2026-11-19","","test_registration","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","358","Customer cannot read admin reports [average-sales-per-week]","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","658","Registration field length limits [max-minus-1-address.street]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","1092","Same cart cannot be ordered twice","tests.api","2026-11-19","skipped","2026-11-19","","test_checkout_rules","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","1464","Customer cannot change another customers order status","tests.api","2026-11-19","skipped","2026-11-19","","test_access_writes","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","495","Date of birth age limits [born-in-the-future]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Login token (JWT) handling: a stolen, forged or old token must not work.","1","Token is short lived and identifies the customer","tests.api","2026-11-19","passed","2026-11-19","","test_tokens","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","570","Registration field length limits [at-max-address.street]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","464","Registration without required field is rejected [password]","tests.api","2026-11-19","passed","2026-11-19","","test_registration","",""
-"Login token (JWT) handling: a stolen, forged or old token must not work.","811","Token stops working after logout","tests.api","2026-11-19","passed","2026-11-19","","test_tokens","",""
-"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1389","Updating to invalid quantity is rejected and cart unchanged [negative]","tests.api","2026-11-19","passed","2026-11-19","","test_cart","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","832","Invoice lines use unit price and add up to total","tests.api","2026-11-19","passed","2026-11-19","","test_checkout_rules","",""
-"Login token (JWT) handling: a stolen, forged or old token must not work.","1139","Old token stops working after refresh","tests.api","2026-11-19","passed","2026-11-19","","test_tokens","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","982","Registration with invalid email is rejected [a@b]","tests.api","2026-11-19","skipped","2026-11-19","","test_registration","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","641","Registration field length limits [max-plus-1-first_name]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","453","Missing billing field is rejected [state]","tests.api","2026-11-19","skipped","2026-11-19","","test_checkout_rules","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","1422","Cart line cannot exceed 99 by adding twice","tests.api","2026-11-19","skipped","2026-11-19","","test_boundaries","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","488","Registration without required field is rejected [first_name]","tests.api","2026-11-19","passed","2026-11-19","","test_registration","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","411","Guest cannot write catalog [update-product]","tests.api","2026-11-19","skipped","2026-11-19","","test_access_writes","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","344","Invalid payment is rejected [gift-card-short-numbers]","tests.api","2026-11-19","passed","2026-11-19","","test_payment","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","741","Missing billing field is rejected [street]","tests.api","2026-11-19","passed","2026-11-19","","test_checkout_rules","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","386","Filter returns only matching products [category]","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
-"Orders: the invoice total equals the sum of the cart lines, the order appears in the customer's own list, and nobody else can read it.","1224","Guest cannot read an invoice","tests.api","2026-11-19","passed","2026-11-19","","test_orders","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","386","Guest cannot write catalog [patch-product]","tests.api","2026-11-19","skipped","2026-11-19","","test_access_writes","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","380","Sort by price is ordered [asc]","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","319","Valid payment is accepted [bank-transfer]","tests.api","2026-11-19","passed","2026-11-19","","test_payment","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","439","Endpoint access by role [guest-messages]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
+Dates are computed from today, so the tests never go stale.","672","Registration field length limits [max-minus-1-first_name]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","348","Login with bad credentials is rejected without token [empty-fields]","tests.api","2026-11-20","passed","2026-11-20","","test_auth","",""
 "Customer: no admin menu, and every admin page is refused when opened by URL.
-    Admin: every admin page opens from the menu, and the admin can find a customer's account and order.","0","test_access_control[chromium-admin]","tests.ui","2026-11-19","skipped","2026-11-19","","test_shop_ui","",""
+    Admin: every admin page opens from the menu, and the admin can find a customer's account and order.","0","test_access_control[chromium-admin]","tests.ui","2026-11-20","skipped","2026-11-20","","test_shop_ui","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","350","Endpoint access by role [admin-sales-report]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","689","Registration field length limits [max-minus-1-address.house_number]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","852","Order is created with each payment method [bank-transfer]","tests.api","2026-11-19","passed","2026-11-19","","test_checkout_rules","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","735","Missing billing field is rejected [city]","tests.api","2026-11-19","passed","2026-11-19","","test_checkout_rules","",""
+Dates are computed from today, so the tests never go stale.","543","Registration field length limits [max-plus-1-address.house_number]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","714","Registration field length limits [at-max-address.state]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","337","Product detail matches listing","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
+Dates are computed from today, so the tests never go stale.","757","Date of birth age limits [turns-18-tomorrow]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","355","Endpoint access by role [admin-me]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","725","Registration field length limits [max-minus-1-address.state]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","1197","Ordering reduces stock by the ordered quantity","tests.api","2026-11-19","skipped","2026-11-19","","test_checkout_rules","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","757","Registration with invalid email is rejected [has space@x.com]","tests.api","2026-11-19","skipped","2026-11-19","","test_registration","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","871","Order is created with each payment method [credit-card]","tests.api","2026-11-19","passed","2026-11-19","","test_checkout_rules","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1679","Endpoint access by role [customer-sales-report]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","700","Missing billing field is rejected [country]","tests.api","2026-11-19","passed","2026-11-19","","test_checkout_rules","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","453","Sort by price is ordered [desc]","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
-"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1907","Invalid cart input is rejected and cart unchanged [zero-quantity]","tests.api","2026-11-19","passed","2026-11-19","","test_cart","",""
+Dates are computed from today, so the tests never go stale.","495","Date of birth age limits [impossible-date]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","369","Registration without required field is rejected [password]","tests.api","2026-11-20","passed","2026-11-20","","test_registration","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","660","Registration field length limits [at-max-address.city]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Browser tests. Every step under test goes through the screen. The API is used only for preconditions
-(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_cart_quantity_change_and_remove[chromium]","tests.ui","2026-11-19","skipped","2026-11-19","","test_shop_ui","",""
+Dates are computed from today, so the tests never go stale.","708","Registration field length limits [max-minus-1-last_name]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","806","Order is created with each payment method [cash-on-delivery]","tests.api","2026-11-20","passed","2026-11-20","","test_checkout_rules","",""
+"Login token (JWT) handling: a stolen, forged or old token must not work.","387","Token with edited role is rejected","tests.api","2026-11-20","passed","2026-11-20","","test_tokens","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","414","Missing billing field is rejected [state]","tests.api","2026-11-20","skipped","2026-11-20","","test_checkout_rules","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","705","Password minimum length [8-chars-min]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","341","Login with bad credentials is rejected without token [empty-password]","tests.api","2026-11-19","passed","2026-11-19","","test_auth","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","1134","Valid registration returns user without password","tests.api","2026-11-19","passed","2026-11-19","","test_registration","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","319","Registration enforces password policy [no-uppercase]","tests.api","2026-11-19","passed","2026-11-19","","test_registration","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1904","Endpoint access by role [customer-monthly-report]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Login token (JWT) handling: a stolen, forged or old token must not work.","325","Unsigned token is rejected","tests.api","2026-11-19","passed","2026-11-19","","test_tokens","",""
+Dates are computed from today, so the tests never go stale.","1431","Cart quantity limits on update [max-plus-1]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","346","Login with bad credentials is rejected without token [no-fields]","tests.api","2026-11-20","passed","2026-11-20","","test_auth","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","856","Invoice lines use unit price and add up to total","tests.api","2026-11-20","passed","2026-11-20","","test_checkout_rules","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","795","Missing billing field is rejected [country]","tests.api","2026-11-20","passed","2026-11-20","","test_checkout_rules","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1446","Updating to invalid quantity is rejected and cart unchanged [zero]","tests.api","2026-11-20","passed","2026-11-20","","test_cart","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","491","Registration field length limits [max-plus-1-address.street]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","359","Registration enforces password policy [no-symbol]","tests.api","2026-11-19","passed","2026-11-19","","test_registration","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","326","Endpoint access by role [guest-invoices]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","594","Date of birth age limits [turns-18-tomorrow]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1768","Delete removes only that line","tests.api","2026-11-19","passed","2026-11-19","","test_cart","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","374","Filter returns only matching products [brand]","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","537","Registration field length limits [max-plus-1-last_name]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","1139","Customer cannot edit another customers profile","tests.api","2026-11-19","passed","2026-11-19","","test_access_writes","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1519","Weak new password is rejected [no-symbol]","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","655","Registration field length limits [at-max-phone]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1477","Endpoint access by role [customer-messages]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","341","Customer cannot read admin reports [top10-purchased-products]","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","340","Customer cannot read admin reports [customers-by-country]","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","333","Search returns only matching names","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","369","Endpoint access by role [admin-invoices]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1001","Endpoint access by role [admin-users-list]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","897","Customer cannot delete another customer","tests.api","2026-11-19","passed","2026-11-19","","test_access_writes","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","472","Registration field length limits [max-plus-1-phone]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","717","Guest cannot place an order","tests.api","2026-11-19","passed","2026-11-19","","test_checkout_rules","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","869","Registration with invalid email is rejected [plainaddress]","tests.api","2026-11-19","skipped","2026-11-19","","test_registration","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","555","Registration field length limits [max-plus-1-address.house_number]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","1535","Customer cannot delete another customers favorite","tests.api","2026-11-19","passed","2026-11-19","","test_access_writes","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","311","Invalid payment is rejected [bank-transfer-no-details]","tests.api","2026-11-19","passed","2026-11-19","","test_payment","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","359","Sort by name ascending is ordered","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","318","Endpoint access by role [admin-me]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1453","Weak new password is rejected [no-uppercase]","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
-"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","314","Invalid payment is rejected [unknown-method-bitcoin]","tests.api","2026-11-19","skipped","2026-11-19","","test_payment","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","332","Registration enforces password policy [too-short]","tests.api","2026-11-19","passed","2026-11-19","","test_registration","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","747","Date of birth age limits [age-30]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","1183","Customer cannot read another customers favorite","tests.api","2026-11-19","skipped","2026-11-19","","test_access_writes","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","714","Registration field length limits [max-minus-1-address.city]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1878","Changed password replaces the old one","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","786","Products with with in the name can be found","tests.api","2026-11-19","skipped","2026-11-19","","test_catalog","",""
-"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
-
-Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","1423","Cart quantity limits on update [max-99]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1811","Invalid cart input is rejected and cart unchanged [unknown-product]","tests.api","2026-11-19","passed","2026-11-19","","test_cart","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","908","Registration with invalid email is rejected [@no-local.com]","tests.api","2026-11-19","skipped","2026-11-19","","test_registration","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","316","Guest cannot write catalog [create-category]","tests.api","2026-11-19","skipped","2026-11-19","","test_access_writes","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","2851","Repeated wrong passwords lock the account","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
+Dates are computed from today, so the tests never go stale.","584","Date of birth age limits [age-100]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
 "Customer: no admin menu, and every admin page is refused when opened by URL.
-    Admin: every admin page opens from the menu, and the admin can find a customer's account and order.","0","test_access_control[chromium-customer]","tests.ui","2026-11-19","skipped","2026-11-19","","test_shop_ui","",""
-"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","324","Search without matches is empty","tests.api","2026-11-19","passed","2026-11-19","","test_catalog","",""
-"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1776","Invalid cart input is rejected and cart unchanged [non-numeric-quantity]","tests.api","2026-11-19","passed","2026-11-19","","test_cart","",""
+    Admin: every admin page opens from the menu, and the admin can find a customer's account and order.","0","test_access_control[chromium-customer]","tests.ui","2026-11-20","skipped","2026-11-20","","test_shop_ui","",""
+"Login token (JWT) handling: a stolen, forged or old token must not work.","1","Token is short lived and identifies the customer","tests.api","2026-11-20","passed","2026-11-20","","test_tokens","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","384","Search without matches is empty","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","690","Registration field length limits [at-max-address.house_number]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1505","Endpoint access by role [customer-other-user]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Login token (JWT) handling: a stolen, forged or old token must not work.","721","Token stops working after logout","tests.api","2026-11-20","passed","2026-11-20","","test_tokens","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1499","Weak new password is rejected [no-symbol]","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","433","Login with bad credentials is rejected without token [wrong-password]","tests.api","2026-11-20","passed","2026-11-20","","test_auth","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","709","Date of birth age limits [turned-18-yesterday]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","711","Missing billing field is rejected [street]","tests.api","2026-11-20","passed","2026-11-20","","test_checkout_rules","",""
+"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","364","Login with bad credentials is rejected without token [malformed-email]","tests.api","2026-11-20","passed","2026-11-20","","test_auth","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","351","Unknown product id is 404","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1478","Update quantity changes the line","tests.api","2026-11-20","passed","2026-11-20","","test_cart","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","1144","Ordering reduces stock by the ordered quantity","tests.api","2026-11-20","skipped","2026-11-20","","test_checkout_rules","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","501","Customer turning 18 today can register","tests.api","2026-11-20","skipped","2026-11-20","","test_boundaries","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","336","Endpoint access by role [guest-other-user]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1327","Weak new password is rejected [no-uppercase]","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","724","Pagination meta is consistent","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","745","Date of birth age limits [age-30]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","387","Invalid payment is rejected [gift-card-no-details]","tests.api","2026-11-20","passed","2026-11-20","","test_payment","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","378","Sort by price is ordered [desc]","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","358","Guest cannot write catalog [update-product]","tests.api","2026-11-20","skipped","2026-11-20","","test_access_writes","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","413","Invalid payment is rejected [credit-card-no-details]","tests.api","2026-11-20","passed","2026-11-20","","test_payment","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","350","Invalid payment is rejected [gift-card-short-numbers]","tests.api","2026-11-20","passed","2026-11-20","","test_payment","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","355","Customer cannot read admin reports [customers-by-country]","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","1103","Cart quantity limits on add [max-99]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1909","Customer cannot read another customers contact message","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","345","Customer cannot delete catalog items [product]","tests.api","2026-11-20","passed","2026-11-20","","test_access_writes","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","583","Registration field length limits [max-plus-1-address.city]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","344","Guest cannot write catalog [create-brand]","tests.api","2026-11-20","skipped","2026-11-20","","test_access_writes","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","638","Registration field length limits [max-minus-1-address.state]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","511","Registration without required field is rejected [first_name]","tests.api","2026-11-20","passed","2026-11-20","","test_registration","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","702","Products with with in the name can be found","tests.api","2026-11-20","skipped","2026-11-20","","test_catalog","",""
+"Browser tests. Every step under test goes through the screen. The API is used only for preconditions
+(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_checkout_credit_card_invalid_then_valid[chromium]","tests.ui","2026-11-20","skipped","2026-11-20","","test_shop_ui","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","365","Endpoint access by role [admin-other-user]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","788","Registration field length limits [at-max-address.state]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","553","Registration field length limits [max-plus-1-last_name]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","348","Valid payment is accepted [bank-transfer]","tests.api","2026-11-20","passed","2026-11-20","","test_payment","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","718","Registration field length limits [at-max-address.street]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","3218","Repeated wrong passwords lock the account","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","428","Missing billing field is rejected [postal_code]","tests.api","2026-11-20","skipped","2026-11-20","","test_checkout_rules","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1881","Delete removes only that line","tests.api","2026-11-20","passed","2026-11-20","","test_cart","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1795","Invalid cart input is rejected and cart unchanged [zero-quantity]","tests.api","2026-11-20","passed","2026-11-20","","test_cart","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","830","Order is created with each payment method [credit-card]","tests.api","2026-11-20","passed","2026-11-20","","test_checkout_rules","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","897","Order is created with each payment method [bank-transfer]","tests.api","2026-11-20","passed","2026-11-20","","test_checkout_rules","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","356","Invalid payment is rejected [bank-transfer-no-details]","tests.api","2026-11-20","passed","2026-11-20","","test_payment","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","535","Customer cannot delete catalog items [brand]","tests.api","2026-11-20","passed","2026-11-20","","test_access_writes","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","367","Customer cannot read admin reports [average-sales-per-week]","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","401","Guest cannot write catalog [update-brand]","tests.api","2026-11-20","skipped","2026-11-20","","test_access_writes","",""
+"Orders: the invoice total equals the sum of the cart lines, the order appears in the customer's own list, and nobody else can read it.","1246","Order appears in own invoice list with matching lines","tests.api","2026-11-20","passed","2026-11-20","","test_orders","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","2858","Endpoint access by role [customer-sales-report]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","493","Registration without required field is rejected [last_name]","tests.api","2026-11-20","passed","2026-11-20","","test_registration","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","364","Registration enforces password policy [too-short]","tests.api","2026-11-20","passed","2026-11-20","","test_registration","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","675","Registration field length limits [max-minus-1-address.house_number]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Orders: the invoice total equals the sum of the cart lines, the order appears in the customer's own list, and nobody else can read it.","1117","Guest cannot read an invoice","tests.api","2026-11-20","passed","2026-11-20","","test_orders","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","671","Registration with invalid email is rejected [has space@x.com]","tests.api","2026-11-20","skipped","2026-11-20","","test_registration","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","370","Customer cannot read admin reports [top10-best-selling-categories]","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","596","Registration field length limits [at-max-first_name]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","351","Registration enforces password policy [no-digit]","tests.api","2026-11-20","passed","2026-11-20","","test_registration","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","1487","Registering with admin role does not grant admin","tests.api","2026-11-20","passed","2026-11-20","","test_access_writes","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","1489","Cart line cannot exceed 99 by adding twice","tests.api","2026-11-20","skipped","2026-11-20","","test_boundaries","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","344","Filter returns only matching products [category]","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","393","Endpoint access by role [guest-sales-report]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","1685","Customer cannot change another customers order status","tests.api","2026-11-20","skipped","2026-11-20","","test_access_writes","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","335","Guest cannot write catalog [create-product]","tests.api","2026-11-20","skipped","2026-11-20","","test_access_writes","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","421","Endpoint access by role [guest-monthly-report]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","3364","Every product can be found by its full name","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","371","Search returns only matching names","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1531","Weak new password is rejected [no-digit]","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","394","Customer cannot read admin reports [total-sales-per-country]","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1434","Adding same product twice accumulates quantity","tests.api","2026-11-20","passed","2026-11-20","","test_cart","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","661","Date of birth age limits [born-in-the-future]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","719","Missing billing field is rejected [city]","tests.api","2026-11-20","passed","2026-11-20","","test_checkout_rules","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1488","Weak new password is rejected [no-lowercase]","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","351","Endpoint access by role [guest-invoices]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Browser tests. Every step under test goes through the screen. The API is used only for preconditions
+(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_catalog_filter_by_category_and_sort_by_price[chromium]","tests.ui","2026-11-20","skipped","2026-11-20","","test_shop_ui","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","355","Invalid payment is rejected [bnpl-no-installments]","tests.api","2026-11-20","passed","2026-11-20","","test_payment","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","342","Invalid payment is rejected [empty-method]","tests.api","2026-11-20","skipped","2026-11-20","","test_payment","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1784","Invalid cart input is rejected and cart unchanged [non-numeric-quantity]","tests.api","2026-11-20","passed","2026-11-20","","test_cart","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","365","Registration enforces password policy [no-lowercase]","tests.api","2026-11-20","passed","2026-11-20","","test_registration","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","356","Product detail matches listing","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","600","Registration field length limits [max-minus-1-address.city]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","864","Endpoint access by role [admin-monthly-report]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","768","Empty cart cannot be ordered","tests.api","2026-11-20","skipped","2026-11-20","","test_checkout_rules","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","1538","Customer cannot delete another customers favorite","tests.api","2026-11-20","passed","2026-11-20","","test_access_writes","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","1286","Customer cannot read another customers favorite","tests.api","2026-11-20","skipped","2026-11-20","","test_access_writes","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","1133","Customer cannot delete another customer","tests.api","2026-11-20","passed","2026-11-20","","test_access_writes","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1842","Invalid cart input is rejected and cart unchanged [unknown-product]","tests.api","2026-11-20","passed","2026-11-20","","test_cart","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","335","Valid payment is accepted [cash-on-delivery]","tests.api","2026-11-20","passed","2026-11-20","","test_payment","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","526","Registration field length limits [max-plus-1-address.street]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","461","Login with bad credentials is rejected without token [empty-password]","tests.api","2026-11-20","passed","2026-11-20","","test_auth","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1749","Invalid cart input is rejected and cart unchanged [negative-quantity]","tests.api","2026-11-20","passed","2026-11-20","","test_cart","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","356","Endpoint access by role [admin-messages]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Login token (JWT) handling: a stolen, forged or old token must not work.","1203","Old token stops working after refresh","tests.api","2026-11-20","passed","2026-11-20","","test_tokens","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","663","Registration with invalid email is rejected [a@b]","tests.api","2026-11-20","skipped","2026-11-20","","test_registration","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","352","Registration enforces password policy [no-uppercase]","tests.api","2026-11-20","passed","2026-11-20","","test_registration","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","340","Valid payment is accepted [buy-now-pay-later]","tests.api","2026-11-20","passed","2026-11-20","","test_payment","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","339","Valid payment is accepted [credit-card]","tests.api","2026-11-20","passed","2026-11-20","","test_payment","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","406","Customer cannot search all users","tests.api","2026-11-20","skipped","2026-11-20","","test_access_writes","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","649","Password minimum length [9-chars]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","689","Registration with existing email is rejected as duplicate","tests.api","2026-11-20","passed","2026-11-20","","test_registration","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","396","Filter returns only matching products [brand]","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","357","Endpoint access by role [guest-users-list]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1411","Endpoint access by role [customer-messages]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","410","Endpoint access by role [admin-invoices]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","1283","Customer cannot edit another customers profile","tests.api","2026-11-20","passed","2026-11-20","","test_access_writes","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1669","Endpoint access by role [customer-users-list]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","401","Guest cannot write catalog [patch-product]","tests.api","2026-11-20","skipped","2026-11-20","","test_access_writes","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","993","Wrong current password does not change the password","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","756","Customer cannot complete own order","tests.api","2026-11-20","skipped","2026-11-20","","test_access_writes","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","623","Registration field length limits [max-minus-1-address.street]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","531","Registration field length limits [max-plus-1-phone]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","385","Sort by name ascending is ordered","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
+"Catalog: product list shape, pagination, sorting, filtering by category/brand/price, search, and unknown ids.","398","Sort by price is ordered [asc]","tests.api","2026-11-20","passed","2026-11-20","","test_catalog","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","608","Endpoint access by role [guest-messages]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","359","Registration enforces password policy [no-symbol]","tests.api","2026-11-20","passed","2026-11-20","","test_registration","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","1055","Valid registration returns user without password","tests.api","2026-11-20","passed","2026-11-20","","test_registration","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","1236","Out of stock product cannot be ordered","tests.api","2026-11-20","skipped","2026-11-20","","test_checkout_rules","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","833","Same cart cannot be ordered twice","tests.api","2026-11-20","skipped","2026-11-20","","test_checkout_rules","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","367","Password minimum length [7-chars]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","596","Registration field length limits [at-max-last_name]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","821","Order is created with each payment method [buy-now-pay-later]","tests.api","2026-11-20","passed","2026-11-20","","test_checkout_rules","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","1081","Cart quantity limits on add [max-plus-1]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Checkout rules: what may and may not become an order (empty cart, reuse, out of stock, billing address, guest), stock, payment methods and invoice line prices.","707","Guest cannot place an order","tests.api","2026-11-20","passed","2026-11-20","","test_checkout_rules","",""
+"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","661","Registration with invalid email is rejected [@no-local.com]","tests.api","2026-11-20","skipped","2026-11-20","","test_registration","",""
+"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
+
+Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
+when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","375","Guest cannot write catalog [create-category]","tests.api","2026-11-20","skipped","2026-11-20","","test_access_writes","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","1468","Cart quantity limits on update [max-99]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
 "UI/UX tour of the store's smaller features. A broken small feature is still a broken feature.
 
 One test covers many features to stay within the 10-UI-test budget. Each feature is a soft check
@@ -334,16 +327,23 @@ the state of the others. The report lists every failed step. Each step starts fr
 so a failure can't leave the next step in a bad state.
 
 Where the screen shows a filtered list, the expected products come from the API with the same
-filter (the API is the oracle; the step under test is still done only through the screen).","0","test_minor_features_tour[chromium]","tests.ui","2026-11-19","skipped","2026-11-19","","test_minor_features","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","342","Endpoint access by role [guest-me]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
-"Registration: required fields, email and password rules, duplicate emails, and that the response never leaks the password.","589","Registration without required field is rejected [email]","tests.api","2026-11-19","passed","2026-11-19","","test_registration","",""
-"Write-side access control: can a user CHANGE something that isn't theirs, or do admin-only actions?
-
-Safety on the shared site: probes that SHOULD be blocked use non-existent ids or empty bodies, so even
-when the app is broken nothing real is created or modified. Confirmed app bugs are strict xfails.","761","Customer cannot complete own order","tests.api","2026-11-19","skipped","2026-11-19","","test_access_writes","",""
-"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1431","Endpoint access by role [customer-other-user]","tests.api","2026-11-19","passed","2026-11-19","","test_access_control","",""
+filter (the API is the oracle; the step under test is still done only through the screen).","0","test_minor_features_tour[chromium]","tests.ui","2026-11-20","skipped","2026-11-20","","test_minor_features","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","332","Endpoint access by role [guest-me]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","827","Login error does not reveal whether the email exists","tests.api","2026-11-20","passed","2026-11-20","","test_auth","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","953","Endpoint access by role [admin-users-list]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Payment check: every supported method with valid details succeeds; invalid details and unknown methods are rejected.","345","Invalid payment is rejected [unknown-method-bitcoin]","tests.api","2026-11-20","skipped","2026-11-20","","test_payment","",""
+"Login: a registered customer gets a working token; bad credentials are rejected without a token and without revealing whether the email exists.","331","Login with bad credentials is rejected without token [unknown-email]","tests.api","2026-11-20","passed","2026-11-20","","test_auth","",""
+"Login token (JWT) handling: a stolen, forged or old token must not work.","350","Unsigned token is rejected","tests.api","2026-11-20","passed","2026-11-20","","test_tokens","",""
 "Boundary-value tests: each rule is checked on the limit, just inside and just outside.
 
 Limits come from the API spec (maxLength / minLength) and the API's own error messages.
-Dates are computed from today, so the tests never go stale.","704","Registration field length limits [max-minus-1-last_name]","tests.api","2026-11-19","passed","2026-11-19","","test_boundaries","",""
-"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","906","Wrong current password does not change the password","tests.api","2026-11-19","passed","2026-11-19","","test_account_security","",""
+Dates are computed from today, so the tests never go stale.","608","Password minimum length [8-chars-min]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Read access by role: what a guest, a customer and an admin may see. Expected HTTP status per endpoint and role.","1388","Endpoint access by role [customer-me]","tests.api","2026-11-20","passed","2026-11-20","","test_access_control","",""
+"Boundary-value tests: each rule is checked on the limit, just inside and just outside.
+
+Limits come from the API spec (maxLength / minLength) and the API's own error messages.
+Dates are computed from today, so the tests never go stale.","660","Registration field length limits [at-max-address.city]","tests.api","2026-11-20","passed","2026-11-20","","test_boundaries","",""
+"Cart rules: adding, updating and removing lines; invalid input is rejected and leaves the cart unchanged.","1788","Invalid cart input is rejected and cart unchanged [huge-quantity]","tests.api","2026-11-20","passed","2026-11-20","","test_cart","",""
+"Browser tests. Every step under test goes through the screen. The API is used only for preconditions
+(a fresh customer, picking products from the live catalog, an existing order for the admin to find).","0","test_registration_invalid_then_valid[chromium]","tests.ui","2026-11-20","skipped","2026-11-20","","test_shop_ui","",""
+"Account security: lockout after wrong passwords, changing a password, privacy of contact messages, and customers blocked from admin reports.","1687","Changed password replaces the old one","tests.api","2026-11-20","passed","2026-11-20","","test_account_security","",""

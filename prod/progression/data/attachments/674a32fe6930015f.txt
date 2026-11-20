@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/favorites
+
+Request body:
+{"product_id": "01M7W2YTQDD5AS6AV7CKP3VS3P"}
+
+Response 201:
+{"product_id":"01M7W2YTQDD5AS6AV7CKP3VS3P","user_id":"01m7w52k4kttm73sb9c6f8sv41","id":"01m7w52mh9tnh1r931jcw4zd4h"}

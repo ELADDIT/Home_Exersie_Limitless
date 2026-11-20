@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/users/change-password
-
-Request body:
-{"current_password": "jA*(t1Lx!i8Sw4", "new_password": "mnTPIZnXN%rF+2", "new_password_confirmation": "mnTPIZnXN%rF+2"}
-
-Response 200:
-{"success":true}

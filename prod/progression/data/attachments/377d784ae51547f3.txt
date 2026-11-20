@@ -1,0 +1,7 @@
+GET https://api.practicesoftwaretesting.com/invoices/01m7w53e7sjzsmapf4hb4mjgpc
+
+Request body:
+
+
+Response 401:
+{"message":"Unauthorized"}

@@ -1,0 +1,7 @@
+PUT https://api.practicesoftwaretesting.com/invoices/01m7w52e2s5y558dx18py0dbxn/status
+
+Request body:
+{"status": "COMPLETED"}
+
+Response 200:
+{"success":true}

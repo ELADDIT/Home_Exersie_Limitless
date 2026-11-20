@@ -1,0 +1,7 @@
+PATCH https://api.practicesoftwaretesting.com/users/01m7w51zbjb08ynmjchnrc1ba5
+
+Request body:
+{"first_name": "Hacked"}
+
+Response 403:
+{"error":"You can only update your own data."}
