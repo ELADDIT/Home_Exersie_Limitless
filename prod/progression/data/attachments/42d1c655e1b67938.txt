@@ -1,7 +1,0 @@
-POST https://api.practicesoftwaretesting.com/carts/01m7w52twbq5rtkj7mx8k6hqja
-
-Request body:
-{"product_id": "01M7W2YTQDD5AS6AV7CKP3VS3P", "quantity": "abc"}
-
-Response 422:
-{"message":"The quantity field must be an integer.","errors":{"quantity":["The quantity field must be an integer."]}}

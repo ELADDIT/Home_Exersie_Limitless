@@ -1,7 +1,0 @@
-GET https://api.practicesoftwaretesting.com/messages
-
-Request body:
-
-
-Response 200:
-{"current_page":1,"data":[{"id":"01m7w4sdvq71pztrn938akg7a8","user_id":null,"name":"Emmanuel Fay","email":"miles16@example.com","subject":"customer-service","message":"I would like some help with my order, please get back to me soon. Thank you.","status":"NEW","created_at":"2026-11-20 09:32:19","user":null},{"id":"01m7w4r5794acm22r76qx355rw","user_id":null,"name":"Freddy Waelchi","email":"sharon83@example.com","subject":"customer-service","message":"I would like some help with my order, please get back to me soon. Thank you.","status":"NEW","created_at":"2026-11-20 09:31:38","user":null},{"id":"01m7w4n676hsjp5en1m17nzp66","user_id":null,"name":"Cordell Von","email":"reed.reinger-fay50@example.com","subject":"customer-service","message":"I would like some help with my order, please get back to me soon. Thank you.","status":"NEW","created_at":"2026-11-20 09:30:00","user":null}],"from":1,"last_page":1,"per_page":15,"to":3,"total":3}

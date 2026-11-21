@@ -1,0 +1,7 @@
+POST https://api.practicesoftwaretesting.com/users/register
+
+Request body:
+{"first_name": "Danielle", "last_name": "Stevens", "email": "qa.7b987051a6904e169d4ee0d1a684e34c@example.com", "password": "+DKZ0X@mPKBjQ7", "dob": "2008-11-21", "phone": "0612345678", "address": {"street": "Lesingel 8", "house_number": "8", "city": "Steensel", "state": "Noord-Holland", "country": "NL", "postal_code": "1012AB"}}
+
+Response 422:
+{"dob":["Customer must be 18 years old."]}
